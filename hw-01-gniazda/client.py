@@ -1,8 +1,6 @@
-from email.headerregistry import Address
 import socket
 from threading import Thread
-from config import server_ip, server_port
-
+from common import server_ip, server_port
 
 tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -11,49 +9,65 @@ running = True
 
 
 def send_message():
-    while running:
-        command = input('>> ').strip()
+    global running
+    try:
+        while running:
+            command = input('>> ').strip()
 
-        if command.lower() == 't':
-            message = input('message: ')
-            send_tcp(message+'\n')
+            if command.lower() == 't':
+                message = input('message: ')
+                send_tcp(message + '\n')
 
-        elif command.lower() == 'u':
-            message = input('message: ')
-            send_udp(message)
+            elif command.lower() == 'u':
+                message = input('message: ')
+                send_udp(message)
 
-        elif command.lower() == 'm':
-            pass
+            elif command.lower() == 'm':
+                pass
 
-        else:
-            print('Unrecognized command: ', command)
+            else:
+                print('Unrecognized command: ', command)
+    except KeyboardInterrupt:
+        print('client, send_message: interrupt')
+        running = False
 
 
 def listen_tcp():
+    global running
     try:
         while running:
-            message = tcp_socket.recv(5)
+            message = tcp_socket.recv(1024)
 
             if message == b'':
                 return
 
             print(message.decode())
-    except:
+    except KeyboardInterrupt:
+        print('client, listen_tcp: interrupt')
         running = False
 
 
 def listen_udp():
     print('listening udp')
+    global running
     try:
         while running:
-            message, address = udp_socket.recvfrom(3)
+            print('receiving...')
+            message, address = udp_socket.recvfrom(1024)
+            print('received')
             print(message.decode())
-    except:
+    except KeyboardInterrupt:
+        print('client, listen_udp: interrupt')
         running = False
+
+    print('listen udp END')
 
 
 def send_tcp(message):
-    tcp_socket.sendall(message.encode())
+    try:
+        tcp_socket.sendall(message.encode())
+    except KeyboardInterrupt:
+        print('client, send_tcp: interrupt')
     # total_sent = 0
 
     # while total_sent < len(message):
@@ -65,21 +79,29 @@ def send_tcp(message):
 
 
 def send_udp(message):
-    udp_socket.sendto(message.encode(), (server_ip, server_port))
+    try:
+        udp_socket.sendto(message.encode(), (server_ip, server_port))
+    except KeyboardInterrupt:
+        print('client, send_udp: interrupt')
 
 
 if __name__ == '__main__':
     try:
         tcp_socket.connect((server_ip, server_port))
+        _, port = tcp_socket.getsockname()
 
-        # tcp_thread = Thread(target=listen_tcp, daemon=True)
+        udp_socket.bind(('', port))
+
+        tcp_thread = Thread(target=listen_tcp, daemon=True)
         udp_thread = Thread(target=listen_udp, daemon=True)
-        # tcp_thread.start()
+
+        tcp_thread.start()
         udp_thread.start()
 
         send_message()
 
-    except:
+    except KeyboardInterrupt:
+        print('client, main: interrupt')
         running = False
 
     finally:
