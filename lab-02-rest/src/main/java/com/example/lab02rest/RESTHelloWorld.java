@@ -59,7 +59,7 @@ public class RESTHelloWorld {
                 .accept(MediaType.TEXT_HTML).get(String.class));
     }
     private static URI getBaseURI() {
-        return UriBuilder.fromUri("http://localhost:8080/REST_Ex1").build();
+        return UriBuilder.fromUri("http://localhost:8080/lab").build();
     }
 
 }
