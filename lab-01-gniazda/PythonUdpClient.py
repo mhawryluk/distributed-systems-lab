@@ -1,4 +1,4 @@
-import socket;
+import socket
 
 serverIP = "127.0.0.1"
 serverPort = 9008
@@ -10,7 +10,3 @@ client.sendto(msg_bytes, (serverIP, serverPort))
 
 response, address = client.recvfrom(1024)
 print(int.from_bytes(response, byteorder='little'))
-
-
-
-

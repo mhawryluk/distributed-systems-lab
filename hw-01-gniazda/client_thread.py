@@ -24,7 +24,10 @@ class Client(Thread):
 
                 if message == b'':
                     self.socket.close()
+                    print(f'client #{self.id} disconnected')
                     del self.clients[self.address]
+                    print(self.clients)
+                    return
 
                 buffer_message += message.decode()
 

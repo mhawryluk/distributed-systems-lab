@@ -1,7 +1,9 @@
 import socket
+import sys
 from threading import Thread
-from common import server_ip, server_port, multicast_ip, multicast_port
+
 from ascii_art import art
+from common import server_ip, server_port, multicast_ip, multicast_port
 
 tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -28,14 +30,18 @@ def send_message():
                     print('image not found:', image)
 
             elif command.lower() == 'm':
-                message = input('message: ')
-                send_multicast(message + '\n')
+                image = input('image title: ')
+                if image in art:
+                    send_multicast(art[image])
+                else:
+                    print('image not found:', image)
 
             else:
                 print('Unrecognized command: ', command)
     except KeyboardInterrupt:
         print('client, send_message: interrupt')
         running = False
+        dispose()
 
 
 def listen_tcp():
@@ -45,12 +51,13 @@ def listen_tcp():
             message = tcp_socket.recv(1024)
 
             if message == b'':
-                return
+                dispose()
 
             print(message.decode())
-    except KeyboardInterrupt:
+    except (KeyboardInterrupt, OSError):
         print('client, listen_tcp: interrupt')
         running = False
+        dispose()
 
 
 def listen_udp():
@@ -59,9 +66,11 @@ def listen_udp():
         while running:
             message, address = udp_socket.recvfrom(1024)
             print(message.decode())
-    except KeyboardInterrupt:
+
+    except (KeyboardInterrupt, OSError):
         print('client, listen_udp: interrupt')
         running = False
+        dispose()
 
 
 def listen_multicast():
@@ -77,24 +86,23 @@ def listen_multicast():
 
 
 def send_tcp(message):
-    try:
-        tcp_socket.sendall(message.encode())
-    except KeyboardInterrupt:
-        print('client, send_tcp: interrupt')
+    tcp_socket.sendall(message.encode())
 
 
 def send_udp(message):
-    try:
-        udp_socket.sendto(message.encode(), (server_ip, server_port))
-    except KeyboardInterrupt:
-        print('client, send_udp: interrupt')
+    udp_socket.sendto(message.encode(), (server_ip, server_port))
 
 
 def send_multicast(message):
-    try:
-        udp_socket.sendto(message.encode(), (multicast_ip, multicast_port))
-    except KeyboardInterrupt:
-        print('client, send_multicast: interrupt')
+    udp_socket.sendto(message.encode(), (multicast_ip, multicast_port))
+
+
+def dispose():
+    tcp_socket.close()
+    udp_socket.close()
+    multicast_socket.close()
+    print('disconnected from server')
+    sys.exit()
 
 
 if __name__ == '__main__':
@@ -132,5 +140,4 @@ if __name__ == '__main__':
         running = False
 
     finally:
-        tcp_socket.close()
-        udp_socket.close()
+        dispose()

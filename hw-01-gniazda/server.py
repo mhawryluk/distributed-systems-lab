@@ -55,9 +55,7 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         print('server, main: interrupt')
         for client in clients.values():
-            client.running = False
-        for client in clients.values():
-            client.join()
+            client.socket.close()
     finally:
         tcp_socket.close()
         udp_socket.close()
