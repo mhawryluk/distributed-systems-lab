@@ -1,5 +1,6 @@
 from threading import Thread
 import socket
+from common import tcp_receive
 
 
 class Client(Thread):
@@ -14,35 +15,19 @@ class Client(Thread):
         self.clients = clients
 
     def run(self):
-        self.receive_tcp()
-
-    def receive_tcp(self):
         try:
-            buffer_message = ''
-            while True:
-                message = self.socket.recv(3)
-
-                if message == b'':
+            for message in tcp_receive(self.socket):
+                if message is None:
                     self.socket.close()
                     print(f'client #{self.id} disconnected')
                     del self.clients[self.address]
                     return
 
-                buffer_message += message.decode()
+                for client in self.clients.values():
+                    if client != self:
+                        client.socket.sendall(
+                            f'#{client.id}: {message}\n'.encode())
 
-                while True:
-                    newline_index = buffer_message.find('\n')
-
-                    if newline_index != -1:
-                        for client in self.clients.values():
-                            if client != self:
-                                client.socket.sendall(
-                                    f'#{client.id}: {buffer_message[:newline_index]}\n'.encode())
-
-                        buffer_message = '' if newline_index == len(
-                            buffer_message) - 1 else buffer_message[newline_index + 1:]
-                    else:
-                        break
         except (KeyboardInterrupt, OSError):
             pass
         finally:

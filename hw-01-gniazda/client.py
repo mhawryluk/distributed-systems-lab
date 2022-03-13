@@ -2,7 +2,7 @@ import os
 import socket
 from threading import Thread
 from ascii_art import art
-from common import server_ip, server_port, multicast_ip, multicast_port
+from common import server_ip, server_port, multicast_ip, multicast_port, tcp_receive
 
 tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -43,26 +43,12 @@ def send_message():
 
 def listen_tcp():
     try:
-        buffer_message = ''
-        while True:
-            message = tcp_socket.recv(3)
-
-            if message == b'':
+        for message in tcp_receive(tcp_socket):
+            if message is None:
                 dispose()
                 return
-
-            buffer_message += message.decode()
-
-            while True:
-                newline_index = buffer_message.find('\n')
-
-                if newline_index != -1:
-                    print(buffer_message[:newline_index])
-                    print('>> ', end='')
-
-                    buffer_message = '' if newline_index == len(buffer_message) - 1 else buffer_message[newline_index + 1:]
-                else:
-                    break
+            print(message)
+            print('>> ', end='')
     except (KeyboardInterrupt, OSError):
         pass
     finally:
@@ -72,7 +58,7 @@ def listen_tcp():
 def listen_udp():
     try:
         while running:
-            message, address = udp_socket.recvfrom(2048)
+            message, address = udp_socket.recvfrom(1000)
             print(message.decode())
             print('>> ', end='')
 
@@ -84,7 +70,7 @@ def listen_multicast():
     global running
     try:
         while running:
-            message, address = multicast_socket.recvfrom(2048)
+            message, address = multicast_socket.recvfrom(1000)
             if address[1] != udp_socket.getsockname()[1]:
                 print(message.decode())
                 print('>> ', end='')
