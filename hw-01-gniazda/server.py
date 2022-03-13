@@ -4,8 +4,6 @@ from threading import Thread
 from common import server_ip, server_port
 from client_thread import Client
 
-clients = []
-
 tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 tcp_socket.bind((server_ip, server_port))
 
@@ -13,6 +11,8 @@ udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 udp_socket.bind((server_ip, server_port))
 
 running = True
+
+clients = {}
 
 
 def listen_connections():
@@ -22,7 +22,7 @@ def listen_connections():
         while running:
             client_socket, address = tcp_socket.accept()
             client_thread = Client(client_socket, address, clients)
-            clients.append(client_thread)
+            clients[address] = client_thread
             client_thread.start()
     except KeyboardInterrupt:
         print('server, listen_connections: interrupt')
@@ -34,10 +34,11 @@ def listen_udp():
     try:
         while running:
             message, address = udp_socket.recvfrom(1024)
-            print(message.decode(), address)
-            for client in clients:
-                if client.address != address:
-                    udp_socket.sendto(message, client.address)
+            sender_id = clients[address].id if address in clients else 'unknown'
+            message = f'#{sender_id}: {message.decode()}\n'.encode()
+            for client_address in clients:
+                if client_address != address:
+                    udp_socket.sendto(message, client_address)
     except KeyboardInterrupt:
         print('server, listen_udp: interrupt')
         running = False
@@ -53,9 +54,9 @@ if __name__ == '__main__':
         udp_thread.join()
     except KeyboardInterrupt:
         print('server, main: interrupt')
-        for client in clients:
+        for client in clients.values():
             client.running = False
-        for client in clients:
+        for client in clients.values():
             client.join()
     finally:
         tcp_socket.close()
