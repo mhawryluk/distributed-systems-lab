@@ -38,7 +38,6 @@ def send_message():
             else:
                 print('Unrecognized command: ', command)
     except KeyboardInterrupt:
-        running = False
         dispose()
 
 
@@ -53,7 +52,6 @@ def listen_tcp():
 
             print(message.decode(), end='')
     except (KeyboardInterrupt, OSError):
-        running = False
         dispose()
 
 
@@ -65,7 +63,6 @@ def listen_udp():
             print(message.decode())
 
     except (KeyboardInterrupt, OSError):
-        running = False
         dispose()
 
 
@@ -77,7 +74,7 @@ def listen_multicast():
             if address[1] != udp_socket.getsockname()[1]:
                 print(message.decode())
     except (KeyboardInterrupt, OSError):
-        running = False
+        dispose()
 
 
 def send_tcp(message):
@@ -93,6 +90,8 @@ def send_multicast(message):
 
 
 def dispose():
+    global running
+    running = False
     tcp_socket.close()
     udp_socket.close()
     multicast_socket.close()
@@ -129,7 +128,6 @@ if __name__ == '__main__':
         send_message()
 
     except KeyboardInterrupt:
-        running = False
-
+        pass
     finally:
         dispose()
