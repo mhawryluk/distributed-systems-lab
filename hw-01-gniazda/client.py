@@ -15,20 +15,20 @@ def send_message():
     global running
     try:
         while running:
-            command = input('>> ').strip()
+            command = input('>> ').strip().lower()
 
-            if command.lower() == 't':
+            if command == 't':
                 message = input('message: ')
                 send_tcp(message + '\n')
 
-            elif command.lower() == 'u':
+            elif command == 'u':
                 image = input('image title: ')
                 if image in art:
                     send_udp(art[image])
                 else:
                     print('image not found:', image)
 
-            elif command.lower() == 'm':
+            elif command == 'm':
                 image = input('image title: ')
                 if image in art:
                     send_multicast(art[image])
@@ -42,25 +42,39 @@ def send_message():
 
 
 def listen_tcp():
-    global running
     try:
-        while running:
-            message = tcp_socket.recv(1024)
+        buffer_message = ''
+        while True:
+            message = tcp_socket.recv(3)
 
             if message == b'':
                 dispose()
+                return
 
-            print(message.decode(), end='')
+            buffer_message += message.decode()
+
+            while True:
+                newline_index = buffer_message.find('\n')
+
+                if newline_index != -1:
+                    print(buffer_message[:newline_index])
+                    print('>> ', end='')
+
+                    buffer_message = '' if newline_index == len(buffer_message) - 1 else buffer_message[newline_index + 1:]
+                else:
+                    break
     except (KeyboardInterrupt, OSError):
+        pass
+    finally:
         dispose()
 
 
 def listen_udp():
-    global running
     try:
         while running:
-            message, address = udp_socket.recvfrom(1024)
+            message, address = udp_socket.recvfrom(2048)
             print(message.decode())
+            print('>> ', end='')
 
     except (KeyboardInterrupt, OSError):
         dispose()
@@ -70,22 +84,23 @@ def listen_multicast():
     global running
     try:
         while running:
-            message, address = multicast_socket.recvfrom(1024)
+            message, address = multicast_socket.recvfrom(2048)
             if address[1] != udp_socket.getsockname()[1]:
                 print(message.decode())
+                print('>> ', end='')
     except (KeyboardInterrupt, OSError):
         dispose()
 
 
-def send_tcp(message):
+def send_tcp(message: str):
     tcp_socket.sendall(message.encode())
 
 
-def send_udp(message):
+def send_udp(message: str):
     udp_socket.sendto(message.encode(), (server_ip, server_port))
 
 
-def send_multicast(message):
+def send_multicast(message: str):
     udp_socket.sendto(message.encode(), (multicast_ip, multicast_port))
 
 

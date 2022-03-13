@@ -20,7 +20,7 @@ class Client(Thread):
         try:
             buffer_message = ''
             while True:
-                message = self.socket.recv(1024)
+                message = self.socket.recv(3)
 
                 if message == b'':
                     self.socket.close()

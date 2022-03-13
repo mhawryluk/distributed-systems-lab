@@ -31,7 +31,7 @@ def listen_connections():
 def listen_udp():
     try:
         while running:
-            message, address = udp_socket.recvfrom(1024)
+            message, address = udp_socket.recvfrom(2048)
             sender_id = clients[address].id if address in clients else 'unknown'
             message = f'#{sender_id}: {message.decode()}\n'.encode()
             for client_address in clients:
