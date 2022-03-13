@@ -1,7 +1,6 @@
+import os
 import socket
-import sys
 from threading import Thread
-
 from ascii_art import art
 from common import server_ip, server_port, multicast_ip, multicast_port
 
@@ -39,7 +38,6 @@ def send_message():
             else:
                 print('Unrecognized command: ', command)
     except KeyboardInterrupt:
-        print('client, send_message: interrupt')
         running = False
         dispose()
 
@@ -53,9 +51,8 @@ def listen_tcp():
             if message == b'':
                 dispose()
 
-            print(message.decode())
+            print(message.decode(), end='')
     except (KeyboardInterrupt, OSError):
-        print('client, listen_tcp: interrupt')
         running = False
         dispose()
 
@@ -68,7 +65,6 @@ def listen_udp():
             print(message.decode())
 
     except (KeyboardInterrupt, OSError):
-        print('client, listen_udp: interrupt')
         running = False
         dispose()
 
@@ -80,8 +76,7 @@ def listen_multicast():
             message, address = multicast_socket.recvfrom(1024)
             if address[1] != udp_socket.getsockname()[1]:
                 print(message.decode())
-    except KeyboardInterrupt:
-        print('client, listen_multicast: interrupt')
+    except (KeyboardInterrupt, OSError):
         running = False
 
 
@@ -101,15 +96,13 @@ def dispose():
     tcp_socket.close()
     udp_socket.close()
     multicast_socket.close()
-    print('disconnected from server')
-    sys.exit()
+    os._exit(0)
 
 
 if __name__ == '__main__':
     try:
         tcp_socket.connect((server_ip, server_port))
         _, port = tcp_socket.getsockname()
-
         udp_socket.bind(('', port))
 
         multicast_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -136,7 +129,6 @@ if __name__ == '__main__':
         send_message()
 
     except KeyboardInterrupt:
-        print('client, main: interrupt')
         running = False
 
     finally:

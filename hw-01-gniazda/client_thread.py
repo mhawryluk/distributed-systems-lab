@@ -26,7 +26,6 @@ class Client(Thread):
                     self.socket.close()
                     print(f'client #{self.id} disconnected')
                     del self.clients[self.address]
-                    print(self.clients)
                     return
 
                 buffer_message += message.decode()
@@ -38,11 +37,13 @@ class Client(Thread):
                         for client in self.clients.values():
                             if client != self:
                                 client.socket.sendall(
-                                    f'#{client.id}: {buffer_message[:newline_index + 1]}\n'.encode())
+                                    f'#{client.id}: {buffer_message[:newline_index]}\n'.encode())
 
                         buffer_message = '' if newline_index == len(
                             buffer_message) - 1 else buffer_message[newline_index + 1:]
                     else:
                         break
-        except KeyboardInterrupt:
-            print('client_thread receive_tcp: interrupt')
+        except (KeyboardInterrupt, OSError):
+            pass
+        finally:
+            self.socket.close()
