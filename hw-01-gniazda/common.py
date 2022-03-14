@@ -13,7 +13,7 @@ def tcp_receive(tcp_socket: socket.socket):
         message = tcp_socket.recv(1000)
 
         if message == b'':
-            return None
+            yield None
 
         buffer_message += message.decode()
 
