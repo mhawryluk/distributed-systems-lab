@@ -32,8 +32,8 @@ def listen_udp():
     try:
         while running:
             message, address = udp_socket.recvfrom(1000)
-            sender_id = clients[address].id if address in clients else 'unknown'
-            message = f'#{sender_id}: {message.decode()}\n'.encode()
+            sender_nick = clients[address].nick if address in clients else 'unknown'
+            message = f'({sender_nick}): {message.decode()}\n'.encode()
             for client_address in clients:
                 if client_address != address:
                     udp_socket.sendto(message, client_address)

@@ -13,20 +13,25 @@ class Client(Thread):
         self.socket = tcp_socket
         self.address = address
         self.clients = clients
+        self.nick = None
 
     def run(self):
         try:
             for message in tcp_receive(self.socket):
                 if message is None:
                     self.socket.close()
-                    print(f'client #{self.id} disconnected')
+                    print(f'client #{self.id} ({self.nick}) disconnected')
                     del self.clients[self.address]
                     return
 
+                if self.nick is None:
+                    self.nick = message
+                    continue
+
+                full_message = f'({self.nick}): {message}\n'
                 for client in self.clients.values():
                     if client != self:
-                        client.socket.sendall(
-                            f'#{client.id}: {message}\n'.encode())
+                        client.socket.sendall(full_message.encode())
 
         except (KeyboardInterrupt, OSError):
             pass
