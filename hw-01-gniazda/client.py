@@ -116,8 +116,7 @@ if __name__ == '__main__':
         tcp_socket.sendall((nick + '\n').encode())
 
         # initialize multicast channel
-        ip_mreq = socket.inet_aton(multicast_ip) + socket.inet_aton('0.0.0.0')
-        multicast_socket.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, ip_mreq)
+        multicast_socket.setsockopt(socket.IPPROTO_IP, socket.IP_ADD_MEMBERSHIP, socket.inet_aton(multicast_ip) + socket.inet_aton('0.0.0.0'))
         multicast_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         multicast_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
         multicast_socket.bind(('', multicast_port))
