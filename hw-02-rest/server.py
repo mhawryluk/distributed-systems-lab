@@ -1,21 +1,44 @@
 from flask import Flask, request, Response
 from flask_cors import CORS
-from requests import get, Response as response_t
-
+from requests import get, request as send_request, Response as response_t
+from secret import translator_headers, translator_url, translator_querystring
+from typing import List
+from collections import Counter
 
 app = Flask(__name__)
 CORS(app)
 
 
-def get_lyrics(artist: str, title: str):
+def get_lyric_stats(lyrics: List[str]):
+    return map(lambda item: f'{item[0]}: {item[1]}', Counter(' '.join(lyrics).lower().split(' ')).most_common(10))
+
+
+def translate(lyrics: List[str]):
+    translated = []
+    for text in lyrics:
+        response: response_t = send_request(
+            "POST",
+            translator_url,
+            data="[{\"Text\": \"" + text + "\"}]",
+            headers=translator_headers,
+            params=translator_querystring
+        )
+
+        if response.status_code == 200:
+            translated.append(response.json()[0]['translations'][0]['text'])
+
+    if translated:
+        return translated
+
+
+def get_lyrics(artist: str, title: str) -> List[str]:
     response: response_t = get(f'https://api.lyrics.ovh/v1/{artist}/{title}')
     if response.status_code == 200:
-        return response.json()['lyrics'].replace('\n', '<br>').replace('\r', '<br>')
+        return response.json()['lyrics'].replace('\n\n', '|').replace('\r\n', '|').split('|')
 
 
 @app.route('/service', methods=['GET'])
 def service():
-
     artist: str = request.args.get('artist', '')
     title: str = request.args.get('title', '')
 
@@ -26,7 +49,14 @@ def service():
 
     lyrics = get_lyrics(artist, title)
     if lyrics:
-        html += f'<h2>Lyrics</h2> <p>{lyrics}</p>'
+        html += f'<h2>Lyrics</h2> <p>{"<br>".join(lyrics)}</p>'
+
+        # lyric_stats = get_lyric_stats(lyrics)
+        # html += f'<h2> Lyric word stats </h2><p>{"<br>".join(lyric_stats)}</p>'
+
+        # translated_lyrics = translate(lyrics[:5])
+        # if translated_lyrics:
+        #     html += f'<h2>Translated lyrics</h2> <p>{"<br>".join(translated_lyrics)}(...)</p>'
 
     return Response(html, status=200, mimetype='text/html')
 
