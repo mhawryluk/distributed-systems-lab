@@ -7,9 +7,10 @@
     <body>
 
         <script>
-            function getResponse(){
-                let input = document.getElementById('input-box').value
-                const url=`http://192.168.100.6:8080/service?arg=${input}`;
+            function query(){
+                const artist = document.getElementById('artist-box').value
+                const title = document.getElementById('title-box').value
+                const url=`http://192.168.100.6:8080/service?artist=${artist}&title=${title}`;
 
                 fetch(url)
                     .then(function(response) {
@@ -26,11 +27,12 @@
         </script>
 
         <h1>
-            REST API Project
+            Music Info
         </h1>
 
-        <input id="input-box">
-        <button onclick="getResponse()">ENTER</button>
+        <label for="artist-box">Artist: </label> <input id="artist-box">
+        <label for="title-box">Title: </label> <input id="title-box">
+        <button onclick="query()">ENTER</button>
 
     </body>
 
