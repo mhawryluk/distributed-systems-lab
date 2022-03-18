@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <title>REST HW</title>
+
+    </head>
+
+    <body>
+
+        <script>
+            function getResponse(){
+                let input = document.getElementById('input-box').value
+                const url=`http://192.168.100.6:8080/service?arg=${input}`;
+
+                fetch(url)
+                    .then(function(response) {
+                          if(response.ok) {
+                              response.text().then(function(data) {
+                                  document.querySelector('body').innerHTML = data
+                              });
+                          } else {
+                              console.log("response failed");
+                          }
+                    });
+
+            }
+        </script>
+
+        <h1>
+            REST API Project
+        </h1>
+
+        <input id="input-box">
+        <button onclick="getResponse()">ENTER</button>
+
+    </body>
+
+</html>
