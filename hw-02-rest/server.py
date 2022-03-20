@@ -3,6 +3,7 @@ from flask_cors import CORS
 from secret import translator_headers, translator_url, translator_querystring
 from typing import List, Optional, Any
 from collections import Counter
+from text_matching import kmp
 import asyncio
 import aiohttp
 
@@ -60,7 +61,8 @@ async def get_translated_lyrics(lyrics: List[str]) -> List[str]:
 
 
 def get_word_list(lyrics: List[str]) -> List[str]:
-    return list(filter(lambda x: x.strip() != '', ' '.join(lyrics).lower().split(' ')))
+    words = list(filter(lambda x: (x.strip() != ''), ' '.join(lyrics).lower().replace(',', '').split(' ')))
+    return words
 
 
 def get_lyric_stats(lyrics: List[str]) -> List[str]:
@@ -69,6 +71,10 @@ def get_lyric_stats(lyrics: List[str]) -> List[str]:
 
 def get_lyric_count(lyrics: List[str]) -> int:
     return len(set(get_word_list(lyrics)))
+
+
+def get_title_in_lyrics(lyrics: List[str], title: str) -> list[int]:
+    return kmp(get_word_list(lyrics), title.lower().split(' '))
 
 
 @app.route('/', methods=['GET'])
@@ -90,10 +96,14 @@ def service():
     lyrics, (info, recs) = asyncio.run(get_lyrics_and_info(artist, title))
 
     if lyrics is None and info is None and recs is None:
-        return Response(f'<p>No information found about: {artist} - "{title}"</p>', status=200, mimetype='text/html')
+        return Response(f'<p>No information found about: {artist} - "{title}"</p>', status=404, mimetype='text/html')
 
     if lyrics:
         html += f'<h2>Lyrics</h2> <p>{"<br>".join(lyrics)}</p>'
+
+        # translated_lyrics: List[str] = asyncio.run(get_translated_lyrics(lyrics))
+        # if translated_lyrics:
+        #     html += f'<h2>Translated lyrics</h2> <p>{"<br>".join(translated_lyrics)}(...)</p>'
 
         lyric_stats = get_lyric_stats(lyrics)
         html += f'<h2>Most common words</h2><p>{"<br>".join(lyric_stats)}</p>'
@@ -101,9 +111,36 @@ def service():
         count_words = get_lyric_count(lyrics)
         html += f'<h2>Total different words used</h2><p>{count_words}</p>'
 
-        translated_lyrics: List[str] = asyncio.run(get_translated_lyrics(lyrics))
-        if translated_lyrics:
-            html += f'<h2>Translated lyrics</h2> <p>{"<br>".join(translated_lyrics)}(...)</p>'
+        title_matches = get_title_in_lyrics(lyrics, title)
+        html += '<h2>Title presence in lyrics</h2>'
+
+        if title_matches:
+            title_length = len(list(filter(lambda x: x.strip() != '', title.split(' '))))
+            html += '<p>'
+            counter = 0
+            span_len = 0
+            for line in lyrics:
+                for word in line.split(' '):
+                    if word.strip() == '':
+                        continue
+
+                    if counter in title_matches:
+                        html += '<span style="color: red">'
+                        span_len = title_length
+
+                    html += word + ' '
+
+                    if span_len == 1:
+                        html += '</span>'
+
+                    if span_len > 0:
+                        span_len -= 1
+
+                    counter += 1
+                html += '<br>'
+            html += '</p>'
+        else:
+            html += '<p>Title not present in the lyrics</p>'
 
     if info:
         html += f'<h2> Artist Info </h2> <p>{info}</p>'
