@@ -1,6 +1,5 @@
-from flask import Flask, request, Response
+from flask import Flask, request, Response, render_template
 from flask_cors import CORS
-from requests import get, Response as response_t
 from secret import translator_headers, translator_url, translator_querystring
 from typing import List, Tuple, Optional, Any
 from collections import Counter
@@ -58,6 +57,11 @@ async def get_lyrics_and_info(artist: str, title: str) -> tuple[Optional[List[st
             info = [info_json['Info'][0]['wTeaser'], [rec['Name'] for rec in info_json['Results'][:5]]]
 
     return lyrics, info
+
+
+@app.route('/', methods=['GET'])
+def webpage():
+    return render_template('index.html')
 
 
 @app.route('/service', methods=['GET'])

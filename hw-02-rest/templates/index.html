@@ -1,7 +1,7 @@
 <html>
     <head>
         <title>REST HW</title>
-        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="../static/styles.css">
     </head>
 
     <body>
@@ -10,7 +10,7 @@
             function query(){
                 const artist = document.getElementById('artist-box').value
                 const title = document.getElementById('title-box').value
-                const url=`http://192.168.100.6:8080/service?artist=${artist}&title=${title}`;
+                const url=`service?artist=${artist}&title=${title}`;
 
                 fetch(url)
                     .then(function(response) {
