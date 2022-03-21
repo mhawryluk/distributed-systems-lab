@@ -14,8 +14,8 @@ CORS(app)
 async def get_lyrics_and_info(artist: str, title: str) -> tuple[Optional[List[str]], Optional[list[Any]]]:
     async with aiohttp.ClientSession() as session:
         tasks = [
-            session.get(f'https://api.lyrics.ovh/v1/{artist}/{title}'),
-            session.get(f'https://tastedive.com/api/similar?q={artist}&info=1')
+            session.get(f'https://api.lyrics.ovh/v1/{artist}/{title}'),  # get lyrics
+            session.get(f'https://tastedive.com/api/similar?q={artist}&info=1')  # get arist info and recs
         ]
 
         responses = await asyncio.gather(*tasks)
@@ -37,7 +37,7 @@ async def get_lyrics_and_info(artist: str, title: str) -> tuple[Optional[List[st
     return lyrics, info
 
 
-async def get_translated_lyrics(lyrics: List[str]) -> List[str]:
+async def get_translated_lyrics(lyrics: List[str]) -> Optional[List[str]]:
     translated = []
     async with aiohttp.ClientSession() as session:
 
@@ -55,7 +55,10 @@ async def get_translated_lyrics(lyrics: List[str]) -> List[str]:
 
         for response in responses:
             if response.status == 200:
-                translated.append((await response.json())[0]['translations'][0]['text'])
+                response_json = await response.json()
+                if response_json and 'detectedLanguage' in response_json[0] and response_json[0]['detectedLanguage']['language'] == 'pl':
+                    return None
+                translated.append(response_json[0]['translations'][0]['text'])
 
     return translated
 
@@ -91,19 +94,27 @@ def service():
         return Response(f'<p>wrong arguments (artist: \'{artist}\', title: \'{title}\')</p>', status=400,
                         mimetype='text/html')
 
-    html = f'<h1>{artist} - {title}</h1>'
+    html = f'<h1>{artist} - "{title}"</h1>'
 
-    lyrics, (info, recs) = asyncio.run(get_lyrics_and_info(artist, title))
+    try:
+        lyrics, (info, recs) = asyncio.run(get_lyrics_and_info(artist, title))
+    except Exception as e:
+        print(e)
+        return Response(f'<p>Couldn\'t communicate with an external server</p>', status=501, mimetype='text/html')
 
     if lyrics is None and info is None and recs is None:
-        return Response(f'<p>No information found about: {artist} - "{title}"</p>', status=404, mimetype='text/html')
+        return Response(f'<p>No information found about: {artist} - "{title}"</p>', status=200, mimetype='text/html')
 
     if lyrics:
         html += f'<h2>Lyrics</h2> <p>{"<br>".join(lyrics)}</p>'
 
-        # translated_lyrics: List[str] = asyncio.run(get_translated_lyrics(lyrics))
-        # if translated_lyrics:
-        #     html += f'<h2>Translated lyrics</h2> <p>{"<br>".join(translated_lyrics)}(...)</p>'
+        try:
+            translated_lyrics: Optional[List[str]] = asyncio.run(get_translated_lyrics(lyrics))
+            if translated_lyrics:
+                html += f'<h2>Translated lyrics</h2><p>{"<br>".join(translated_lyrics)}</p>'
+        except Exception as e:
+            print(e)
+            html += f'<h2>Translated lyrics</h2><p>Error receiving lyric translations</p>'
 
         lyric_stats = get_lyric_stats(lyrics)
         html += f'<h2>Most common words</h2><p>{"<br>".join(lyric_stats)}</p>'
@@ -142,10 +153,17 @@ def service():
         else:
             html += '<p>Title not present in the lyrics</p>'
 
+    else:
+        html += f'<h2>Lyrics</h2> <p>Lyrics unavailable</p>'
+
     if info:
         html += f'<h2> Artist Info </h2> <p>{info}</p>'
+    else:
+        html += f'<h2> Artist Info </h2> <p>No artist info found</p>'
     if recs:
         html += f'<h2> Similar to {artist} </h2> <p>{"<br>".join(recs)}</p>'
+    else:
+        html += f'<h2>Similar to {artist}</h2> <p>Nobody found :(</p>'
 
     return Response(html, status=200, mimetype='text/html')
 
