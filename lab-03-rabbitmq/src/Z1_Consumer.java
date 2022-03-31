@@ -23,6 +23,7 @@ public class Z1_Consumer {
         // queue
         String QUEUE_NAME = "queue1";
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+        channel.basicQos(1);
 
         // consumer (handle msg)
         Consumer consumer = new DefaultConsumer(channel) {
@@ -30,12 +31,22 @@ public class Z1_Consumer {
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 String message = new String(body, "UTF-8");
                 System.out.println("Received: " + message);
+                int timeToSleep = Integer.parseInt(message);
+                try {
+                    Thread.sleep(timeToSleep * 1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println("processed");
+                channel.basicAck(envelope.getDeliveryTag(), false);
             }
         };
 
         // start listening
         System.out.println("Waiting for messages...");
-        channel.basicConsume(QUEUE_NAME, true, consumer);
+//        channel.basicConsume(QUEUE_NAME, true, consumer);
+        channel.basicConsume(QUEUE_NAME, false, consumer);
 
         // close
 //        channel.close();
