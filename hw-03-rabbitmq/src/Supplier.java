@@ -7,52 +7,73 @@ import com.rabbitmq.client.Consumer;
 import com.rabbitmq.client.DefaultConsumer;
 import com.rabbitmq.client.Envelope;
 
-import java.io.BufferedReader;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.TimeoutException;
 
 
 public class Supplier {
 
-    public static void main(String[] argv) throws Exception {
+    private final Channel channel;
+    private final int[] orderCount = {0};
+    private final String EXCHANGE_NAME = "exchange2";
+    private final String id;
 
-        // info
-        System.out.println("Z2 CONSUMER");
 
-        // read msg
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Key: ");
-        String key = br.readLine();
-
+    public Supplier(String id, Set <String> gear) throws IOException, TimeoutException {
+        this.id = id;
         // connection & channel
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
         Connection connection = factory.newConnection();
-        Channel channel = connection.createChannel();
-
+        channel = connection.createChannel();
 
         // exchange
-        String EXCHANGE_NAME = "exchange2";
         channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.TOPIC);
+
+        // queues & message handlers
+        for (String orderType : gear){
+            handleOrders(orderType);
+        }
+
+    }
+
+    private void handleOrders(String orderType) throws IOException {
 
         // queue & bind
         String queueName = channel.queueDeclare().getQueue();
-        channel.queueBind(queueName, EXCHANGE_NAME, key);
+        String KEY = "order.*." + orderType;
+        channel.queueBind(queueName, EXCHANGE_NAME, KEY);
+        channel.basicQos(1);
         System.out.println("created queue: " + queueName);
 
-        // consumer (message handling)
+        // message handling
         Consumer consumer = new DefaultConsumer(channel) {
             @Override
-            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException, UnsupportedEncodingException {
-                String message = new String(body, "UTF-8");
-                System.out.println("Received: " + message);
+            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
+                orderCount[0]++;
+                String client = new String(body, StandardCharsets.UTF_8);
+                System.out.println("Received an order for" + orderType + " order #" + orderCount[0]);
+
+                channel.basicAck(envelope.getDeliveryTag(), false);
+
+                String KEY = "confirm." + client;
+                channel.basicPublish(EXCHANGE_NAME, KEY, null, ("Supplier #" + id + ": order for " + orderType + "confirmed").getBytes(StandardCharsets.UTF_8));
+                System.out.println("Sent confirmation to " + client);
             }
         };
 
-
         // start listening
-        System.out.println("Waiting for messages...");
-        channel.basicConsume(queueName, true, consumer);
+        channel.basicConsume(queueName, false, consumer);
+    }
+
+    public static void main(String[] argv) throws Exception {
+        System.out.println("SUPPLIER");
+        Set<String> gear = new HashSet<>(Arrays.asList(argv).subList(2, argv.length));
+        Supplier supplier = new Supplier(argv[1], gear);
     }
 }
