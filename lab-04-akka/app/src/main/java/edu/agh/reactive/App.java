@@ -9,45 +9,46 @@ import akka.actor.typed.javadsl.Behaviors;
 import akka.stream.*;
 import akka.stream.javadsl.*;
 import edu.agh.reactive.hello.HelloActor;
+import edu.agh.reactive.math.MathActor;
 
 
 import java.io.IOException;
 import java.util.concurrent.CompletionStage;
 
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         //////////////////////////////////////////
         //TASK 0 - hello
         // create actor system
 
-        final ActorSystem<String> helloSystem =
-                        ActorSystem.create(HelloActor.create(), "helloActor");
-        // send messages
-        helloSystem.tell("hello world");
+//        final ActorSystem<String> helloSystem =
+//                        ActorSystem.create(HelloActor.create(), "helloActor");
+//        // send messages
+//        helloSystem.tell("hello world");
 
 
         //////////////////////////////////////////
         //TASK 1 - math operations
-///        final ActorSystem<MathActor.MathCommand> mathContext =
-///                ActorSystem.create(MathActor.create(), "actorMath");
-///        System.out.println("math main: actor system ready");
+        final ActorSystem<MathActor.MathCommand> mathContext =
+                ActorSystem.create(MathActor.create(), "actorMath");
+        System.out.println("math main: actor system ready");
 
         // send messages
-///        mathContext.tell(new MathActor.MathCommandAdd(5, 3));
-///        mathContext.tell(new MathActor.MathCommandMultiply(5, 3, null));
-//        mathContext.tell(new MathActor.MathCommandMultiply(5, 2, null));
-//        mathContext.tell(new MathActor.MathCommandDivide(15, 3, null));
-//        mathContext.tell(new MathActor.MathCommandDivide(15, 5, null));
+        mathContext.tell(new MathActor.MathCommandAdd(5, 3));
+        mathContext.tell(new MathActor.MathCommandMultiply(5, 3, null));
+        mathContext.tell(new MathActor.MathCommandMultiply(5, 2, null));
+        mathContext.tell(new MathActor.MathCommandDivide(15, 3, null));
+        mathContext.tell(new MathActor.MathCommandDivide(15, 5, null));
 //
-//        mathContext.tell(new MathActor.MathCommandDivide(15, 0, null));
-//        Thread.sleep(2000);
-//
-//        System.out.println("Math main: sending second package of messages");
-//        mathContext.tell(new MathActor.MathCommandMultiply(5, 3, null));
-//        mathContext.tell(new MathActor.MathCommandMultiply(5, 2, null));
-//        mathContext.tell(new MathActor.MathCommandDivide(15, 3, null));
-//        mathContext.tell(new MathActor.MathCommandDivide(15, 5, null));
-///        System.out.println("Math main: messages send");
+        mathContext.tell(new MathActor.MathCommandDivide(15, 0, null));
+        Thread.sleep(2000);
+
+        System.out.println("Math main: sending second package of messages");
+        mathContext.tell(new MathActor.MathCommandMultiply(5, 3, null));
+        mathContext.tell(new MathActor.MathCommandMultiply(5, 2, null));
+        mathContext.tell(new MathActor.MathCommandDivide(15, 3, null));
+        mathContext.tell(new MathActor.MathCommandDivide(15, 5, null));
+        System.out.println("Math main: messages send");
 
 
 
@@ -83,9 +84,9 @@ public class App {
         } catch (IOException ignored) {
         } finally {
 //            greeterMain.terminate();
-//            mathContext.terminate();
+            mathContext.terminate();
 //            helloSystem.terminate();
-//            streamSystem.terminate();
+            streamSystem.terminate();
         }
     }
 }

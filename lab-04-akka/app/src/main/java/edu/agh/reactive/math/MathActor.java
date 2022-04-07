@@ -2,6 +2,7 @@ package edu.agh.reactive.math;
 
 import akka.actor.typed.ActorRef;
 import akka.actor.typed.Behavior;
+import akka.actor.typed.SupervisorStrategy;
 import akka.actor.typed.javadsl.AbstractBehavior;
 import akka.actor.typed.javadsl.ActorContext;
 import akka.actor.typed.javadsl.Behaviors;
@@ -36,6 +37,17 @@ public class MathActor extends AbstractBehavior<MathActor.MathCommand> {
     }
 
     // TODO: MathCommandDivide
+    public static final class MathCommandDivide implements MathCommand {
+        public final int firstNumber;
+        public final int secondNumber;
+        public final ActorRef<MathCommand> replyTo;
+
+        public MathCommandDivide(int firstNumber, int secondNumber, ActorRef<MathActor.MathCommand> replyTo) {
+            this.firstNumber = firstNumber;
+            this.secondNumber = secondNumber;
+            this.replyTo = replyTo;
+        }
+    }
 
     public static final class MathCommandResult implements MathCommand {
         public final int result;
@@ -48,15 +60,21 @@ public class MathActor extends AbstractBehavior<MathActor.MathCommand> {
     // --- sub-actors, constructor and create
     private ActorRef<MathActor.MathCommandMultiply> actorMultiply;
     // TODO: actorDivide
+    private ActorRef<MathActor.MathCommandDivide> actorDivide;
 
     public MathActor(ActorContext<MathCommand> context) {
         super(context);
-        actorMultiply = getContext().spawn(MathActorMultiply.create(), "actorMultiply");
-        // TODO: actorDivide
+//        actorMultiply = getContext().spawn(MathActorMultiply.create(), "actorMultiply");
+//        // TODO: actorDivide
+//        actorDivide = getContext().spawn(MathActorDivide.create(), "actorDivide");
         // TODO: uncomment this to change supervisor strategy
-//        actorMultiply = getContext().spawn(
-//                Behaviors.supervise(MathActorMultiply.create())
-//                        .onFailure(Exception.class, SupervisorStrategy.restart()), "actorMultiply");
+        actorMultiply = getContext().spawn(
+                Behaviors.supervise(MathActorMultiply.create())
+                        .onFailure(Exception.class, SupervisorStrategy.resume()), "actorMultiply");
+
+        actorDivide = getContext().spawn(
+                Behaviors.supervise(MathActorDivide.create())
+                        .onFailure(Exception.class, SupervisorStrategy.resume()), "actorDivide");
 
     }
 
@@ -70,7 +88,7 @@ public class MathActor extends AbstractBehavior<MathActor.MathCommand> {
         return newReceiveBuilder()
                 .onMessage(MathCommandAdd.class, this::onMathCommandAdd)
                 .onMessage(MathCommandMultiply.class, this::onMathCommandMultiply)
-                // TODO: handle MathCommandDivide
+                .onMessage(MathCommandDivide.class, this::onMathCommandDivide)
                 .onMessage(MathCommandResult.class, this::onMathCommandResult)
                 .build();
     }
@@ -90,6 +108,13 @@ public class MathActor extends AbstractBehavior<MathActor.MathCommand> {
     }
 
     // TODO: handle MathCommandDivide
+
+    private Behavior<MathCommand> onMathCommandDivide(MathCommandDivide mathCommandDivide) {
+        System.out.println("actorMath: received command: multiply");
+        System.out.println("actorMath: sending to actorMultiply");
+        actorDivide.tell(new MathActor.MathCommandDivide(mathCommandDivide.firstNumber, mathCommandDivide.secondNumber, getContext().getSelf()));
+        return this;
+    }
 
     private Behavior<MathCommand> onMathCommandResult(MathCommandResult mathCommandResult) {
         System.out.println("actorMath: received result: " + mathCommandResult.result);
