@@ -58,6 +58,7 @@ public class Supplier {
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 orderCount[0]++;
                 String crewName = new String(body, StandardCharsets.UTF_8);
+
                 System.out.println("Received an order for " + orderType + " order #" + orderCount[0] + " from " + crewName);
 
                 channel.basicAck(envelope.getDeliveryTag(), false);

@@ -57,7 +57,6 @@ public class Crew {
         while (true) {
             // read order from stdin
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            System.out.println("Order type: ");
             String orderType = br.readLine();
 
             // break condition
