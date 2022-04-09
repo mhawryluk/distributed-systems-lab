@@ -55,7 +55,7 @@ public class Crew {
 
     private void listenAdmin() throws IOException {
         // queue & bind
-        String queueName = channel.queueDeclare("admin.crews."+name, true, false, false, null).getQueue();
+        String queueName = channel.queueDeclare("admin.crews." + name, true, false, false, null).getQueue();
         channel.queueBind(queueName, EXCHANGE_NAME, "admin.crews");
         channel.queueBind(queueName, EXCHANGE_NAME, "admin.all");
         System.out.println("created queue: " + queueName);
@@ -96,7 +96,6 @@ public class Crew {
     }
 
     public static void main(String[] argv) throws Exception {
-
         // info
         System.out.println("CREW");
         new Crew(argv[0]);

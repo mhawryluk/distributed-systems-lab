@@ -6,12 +6,12 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeoutException;
 
-public class Adiministrator {
+public class Administrator {
 
     private final String EXCHANGE_NAME = "exchange2";
     private final Channel channel;
 
-    public Adiministrator() throws IOException, TimeoutException {
+    public Administrator() throws IOException, TimeoutException {
         // connection & channel
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
@@ -24,6 +24,7 @@ public class Adiministrator {
         listenMessages();
         sendMessages();
     }
+
 
     private void listenMessages() throws IOException {
 
@@ -72,6 +73,6 @@ public class Adiministrator {
 
     public static void main(String[] argv) throws Exception {
         System.out.println("ADMINISTRATOR");
-        new Adiministrator();
+        new Administrator();
     }
 }

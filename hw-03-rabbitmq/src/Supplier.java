@@ -1,12 +1,4 @@
-import com.rabbitmq.client.AMQP;
-import com.rabbitmq.client.BuiltinExchangeType;
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.Consumer;
-import com.rabbitmq.client.DefaultConsumer;
-import com.rabbitmq.client.Envelope;
-
+import com.rabbitmq.client.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -24,7 +16,7 @@ public class Supplier {
     private final String name;
 
 
-    public Supplier(String name, Set <String> gear) throws IOException, TimeoutException {
+    public Supplier(String name, Set<String> gear) throws IOException, TimeoutException {
         this.name = name;
 
         // connection & channel
@@ -40,14 +32,14 @@ public class Supplier {
         listenAdmin();
 
         // queues & message handlers
-        for (String orderType : gear){
+        for (String orderType : gear) {
             handleOrders(orderType);
         }
     }
 
     private void listenAdmin() throws IOException {
         // queue & bind
-        String queueName = channel.queueDeclare("admin.suppliers."+name, true, false, false, null).getQueue();
+        String queueName = channel.queueDeclare("admin.suppliers." + name, true, false, false, null).getQueue();
         channel.queueBind(queueName, EXCHANGE_NAME, "admin.suppliers");
         channel.queueBind(queueName, EXCHANGE_NAME, "admin.all");
         System.out.println("created queue: " + queueName);
