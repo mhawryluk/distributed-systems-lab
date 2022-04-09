@@ -24,6 +24,7 @@ public class Crew {
         // exchange
         channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.TOPIC);
 
+        listenAdmin();
         listenResponses();
         makeOrders();
     }
@@ -44,6 +45,28 @@ public class Crew {
                 String confirmation = new String(body, StandardCharsets.UTF_8);
                 System.out.println("Received confirmation: " + confirmation);
 
+                channel.basicAck(envelope.getDeliveryTag(), false);
+            }
+        };
+
+        // start listening
+        channel.basicConsume(queueName, false, consumer);
+    }
+
+    private void listenAdmin() throws IOException {
+        // queue & bind
+        String queueName = channel.queueDeclare("admin.crews."+name, true, false, false, null).getQueue();
+        channel.queueBind(queueName, EXCHANGE_NAME, "admin.crews");
+        channel.queueBind(queueName, EXCHANGE_NAME, "admin.all");
+        System.out.println("created queue: " + queueName);
+
+        // message handling
+        Consumer consumer = new DefaultConsumer(channel) {
+            @Override
+            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
+                String message = new String(body, StandardCharsets.UTF_8);
+
+                System.out.println("Received a message from admin: " + message);
                 channel.basicAck(envelope.getDeliveryTag(), false);
             }
         };
@@ -76,7 +99,6 @@ public class Crew {
 
         // info
         System.out.println("CREW");
-
-        Crew crew = new Crew(argv[0]);
+        new Crew(argv[0]);
     }
 }
