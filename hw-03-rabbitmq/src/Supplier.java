@@ -21,11 +21,12 @@ public class Supplier {
     private final Channel channel;
     private final int[] orderCount = {0};
     private final String EXCHANGE_NAME = "exchange2";
-    private final String id;
+    private final String name;
 
 
-    public Supplier(String id, Set <String> gear) throws IOException, TimeoutException {
-        this.id = id;
+    public Supplier(String name, Set <String> gear) throws IOException, TimeoutException {
+        this.name = name;
+
         // connection & channel
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
@@ -45,8 +46,8 @@ public class Supplier {
     private void handleOrders(String orderType) throws IOException {
 
         // queue & bind
-        String queueName = channel.queueDeclare().getQueue();
-        String KEY = "order.*." + orderType;
+        String KEY = "order." + orderType;
+        String queueName = channel.queueDeclare(KEY, true, false, false, null).getQueue();
         channel.queueBind(queueName, EXCHANGE_NAME, KEY);
         channel.basicQos(1);
         System.out.println("created queue: " + queueName);
@@ -56,14 +57,14 @@ public class Supplier {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 orderCount[0]++;
-                String client = new String(body, StandardCharsets.UTF_8);
-                System.out.println("Received an order for" + orderType + " order #" + orderCount[0]);
+                String crewName = new String(body, StandardCharsets.UTF_8);
+                System.out.println("Received an order for " + orderType + " order #" + orderCount[0] + " from " + crewName);
 
                 channel.basicAck(envelope.getDeliveryTag(), false);
 
-                String KEY = "confirm." + client;
-                channel.basicPublish(EXCHANGE_NAME, KEY, null, ("Supplier #" + id + ": order for " + orderType + "confirmed").getBytes(StandardCharsets.UTF_8));
-                System.out.println("Sent confirmation to " + client);
+                String KEY = "confirm." + crewName;
+                channel.basicPublish(EXCHANGE_NAME, KEY, null, ("supplier: " + name + ", orderID: " + orderCount[0] + ", orderType: " + orderType + ", crewName: " + crewName).getBytes(StandardCharsets.UTF_8));
+                System.out.println("Sent confirmation to " + crewName + " (" + orderType + ")");
             }
         };
 
@@ -73,7 +74,7 @@ public class Supplier {
 
     public static void main(String[] argv) throws Exception {
         System.out.println("SUPPLIER");
-        Set<String> gear = new HashSet<>(Arrays.asList(argv).subList(2, argv.length));
-        Supplier supplier = new Supplier(argv[1], gear);
+        Set<String> gear = new HashSet<>(Arrays.asList(argv).subList(1, argv.length));
+        Supplier supplier = new Supplier(argv[0], gear);
     }
 }
