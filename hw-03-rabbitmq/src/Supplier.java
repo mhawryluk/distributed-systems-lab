@@ -37,28 +37,6 @@ public class Supplier {
         }
     }
 
-    private void listenAdmin() throws IOException {
-        // queue & bind
-        String queueName = channel.queueDeclare("admin.suppliers." + name, true, false, false, null).getQueue();
-        channel.queueBind(queueName, EXCHANGE_NAME, "admin.suppliers");
-        channel.queueBind(queueName, EXCHANGE_NAME, "admin.all");
-        System.out.println("created queue: " + queueName);
-
-        // message handling
-        Consumer consumer = new DefaultConsumer(channel) {
-            @Override
-            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
-                String message = new String(body, StandardCharsets.UTF_8);
-
-                System.out.println("Received a message from admin: " + message);
-                channel.basicAck(envelope.getDeliveryTag(), false);
-            }
-        };
-
-        // start listening
-        channel.basicConsume(queueName, false, consumer);
-    }
-
     private void handleOrders(String orderType) throws IOException {
 
         // queue & bind
@@ -82,6 +60,28 @@ public class Supplier {
                 String KEY = "confirm." + crewName;
                 channel.basicPublish(EXCHANGE_NAME, KEY, null, ("supplier: " + name + ", orderID: " + orderCount[0] + ", orderType: " + orderType + ", crewName: " + crewName).getBytes(StandardCharsets.UTF_8));
                 System.out.println("Sent confirmation to " + crewName + " (" + orderType + ")");
+            }
+        };
+
+        // start listening
+        channel.basicConsume(queueName, false, consumer);
+    }
+
+    private void listenAdmin() throws IOException {
+        // queue & bind
+        String queueName = channel.queueDeclare("admin.suppliers." + name, true, false, false, null).getQueue();
+        channel.queueBind(queueName, EXCHANGE_NAME, "admin.suppliers");
+        channel.queueBind(queueName, EXCHANGE_NAME, "admin.all");
+        System.out.println("created queue: " + queueName);
+
+        // message handling
+        Consumer consumer = new DefaultConsumer(channel) {
+            @Override
+            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
+                String message = new String(body, StandardCharsets.UTF_8);
+
+                System.out.println("Received a message from admin: " + message);
+                channel.basicAck(envelope.getDeliveryTag(), false);
             }
         };
 

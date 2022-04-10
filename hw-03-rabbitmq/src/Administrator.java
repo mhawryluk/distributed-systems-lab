@@ -40,7 +40,7 @@ public class Administrator {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 String confirmation = new String(body, StandardCharsets.UTF_8);
-                System.out.println("Received message: " + confirmation + ", key: " + envelope.getDeliveryTag());
+                System.out.println("Received message: " + confirmation + ", key: " + envelope.getRoutingKey());
 
                 channel.basicAck(envelope.getDeliveryTag(), false);
             }
@@ -60,6 +60,11 @@ public class Administrator {
             // break condition
             if ("exit".equals(receiver)) {
                 break;
+            }
+
+            if (!"crews".equals(receiver) && !"suppliers".equals(receiver) && !"all".equals(receiver)){
+                System.out.println("Invalid receiver");
+                continue;
             }
 
             String key = "admin." + receiver;

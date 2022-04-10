@@ -25,11 +25,31 @@ public class Crew {
         channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.TOPIC);
 
         listenAdmin();
-        listenResponses();
+        listenConfirmations();
         makeOrders();
     }
 
-    private void listenResponses() throws IOException {
+    private void makeOrders() throws IOException {
+
+        while (true) {
+            // read order from stdin
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            String orderType = br.readLine();
+
+            // break condition
+            if ("exit".equals(orderType)) {
+                break;
+            }
+
+            String key = "order." + orderType;
+
+            // publish
+            channel.basicPublish(EXCHANGE_NAME, key, null, name.getBytes(StandardCharsets.UTF_8));
+            System.out.println("Placed an order for " + orderType);
+        }
+    }
+
+    private void listenConfirmations() throws IOException {
 
         // queue & bind
         String KEY = "confirm." + name;
@@ -73,26 +93,6 @@ public class Crew {
 
         // start listening
         channel.basicConsume(queueName, false, consumer);
-    }
-
-    private void makeOrders() throws IOException {
-
-        while (true) {
-            // read order from stdin
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            String orderType = br.readLine();
-
-            // break condition
-            if ("exit".equals(orderType)) {
-                break;
-            }
-
-            String key = "order." + orderType;
-
-            // publish
-            channel.basicPublish(EXCHANGE_NAME, key, null, name.getBytes(StandardCharsets.UTF_8));
-            System.out.println("Placed an order for " + orderType);
-        }
     }
 
     public static void main(String[] argv) throws Exception {
