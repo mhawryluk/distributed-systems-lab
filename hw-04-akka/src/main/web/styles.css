@@ -1,0 +1,27 @@
+* {
+    margin: 20px;
+}
+
+.main-component {
+    margin: 20px;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+#chat-box {
+    display: grid;
+}
+
+.message {
+    height: 30px;
+    width: fit-content;
+    background-color: #56a5ec;
+    padding: 10px;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    margin: auto;
+}
