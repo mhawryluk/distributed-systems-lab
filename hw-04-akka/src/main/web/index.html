@@ -15,7 +15,7 @@
     <div class="main-component">
         <div>
             <label for="id-input">enter username:</label><input id="id-input">
-            <button onclick=connect()>Connect</button>
+            <button onclick=connect() id="id-button">Connect</button>
         </div>
 
         <div>
@@ -34,6 +34,7 @@
         let idBox = document.getElementById("id-input")
         let inputBox = document.getElementById("message-input")
         let chatBox = document.getElementById("chat-box")
+        let idButton = document.getElementById("id-button")
 
         function connect() {
             let client_id = idBox.value
@@ -60,12 +61,14 @@
 
                 chatBox.innerHTML += `<div class="message"> ${received_msg}</div>`
             };
-            
+
+            idButton.hidden = true;
         }
 
         function sendMessage() {
             let message = inputBox.value;
             socket.send(message);
+            inputBox.value = "";
         }
     </script>
 
