@@ -6,43 +6,42 @@ import akka.stream.scaladsl.{Flow, GraphDSL, Merge, Sink, Source}
 import akka.stream.{FlowShape, OverflowStrategy}
 
 
-case class Chatroom(roomName: String)(implicit actorSystem: ActorSystem) {
+case class Chatroom(chatroom: String)(implicit actorSystem: ActorSystem) {
 
-  private val chatroomActor = actorSystem.actorOf(Props(classOf[ChatroomActor]))
+  private val chatroomActor = actorSystem.actorOf(Props[ChatroomActor])
 
   def flow(username: String): Flow[Message, Message, _] = {
+    val source = Source.actorRef[ChatMessage](20, OverflowStrategy.fail)
+    val graph = GraphDSL.createGraph(source) {
+       implicit builder => sourceShape =>
+        import GraphDSL.Implicits._
 
-    Flow.fromGraph(GraphDSL.createGraph(Source.actorRef[ChatMessage](10, OverflowStrategy.fail)) {
+        val websocketReceive = builder.add(
+          Flow[Message].collect {
+            case TextMessage.Strict(txt) => ChatMessage(username, txt)
+          }
+        )
 
-      import GraphDSL.Implicits._
+        val websocketSend = builder.add(
+          Flow[ChatMessage].map {
+            case ChatMessage(username, text) => TextMessage(s"$username: $text")
+          }
+        )
 
-      implicit builder => source =>
+        val materialized = builder.materializedValue.map(actor => Connected(username, actor))
 
-          val websocketReceive = builder.add(
-            Flow[Message].collect {
-              case TextMessage.Strict(txt) => ChatMessage(username, txt)
-            }
-          )
+        val sink = Sink.actorRef[ChatEvent](chatroomActor, Disconnected(username))
 
-          val websocketSend = builder.add(
-            Flow[ChatMessage].map {
-              case ChatMessage(username, text) => TextMessage(s"$username: $text")
-            }
-          )
+        val merge = builder.add(Merge[ChatEvent](2))
 
-          val materialized = builder.materializedValue.map(actor => Connected(username, actor))
+        websocketReceive ~> merge.in(0)
+        materialized ~> merge.in(1)
+        merge ~> sink
 
-          val sink = Sink.actorRef[ChatEvent](chatroomActor, Disconnected(username))
+        sourceShape ~> websocketSend
 
-          val merge = builder.add(Merge[ChatEvent](2))
-
-          websocketReceive ~> merge.in(0)
-          materialized ~> merge.in(1)
-          merge ~> sink
-
-          source ~> websocketSend
-
-          FlowShape(websocketReceive.in, websocketSend.out)
-    })
+        FlowShape(websocketReceive.in, websocketSend.out)
+    }
+    Flow.fromGraph(graph)
   }
 }

@@ -12,7 +12,8 @@ class ChatroomActor extends Actor {
       users += username -> actorRef
       sendMessage(ChatMessage(username, "CONNECTED"))
 
-    case message: ChatMessage => sendMessage(message)
+    case message: ChatMessage =>
+      sendMessage(message)
 
     case Disconnected(username) =>
       users -= username

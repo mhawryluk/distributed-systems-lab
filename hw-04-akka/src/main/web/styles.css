@@ -46,13 +46,13 @@ h1 {
 }
 
 .received-message {
-    background-color: #56a5ec;
+    background-color: #a1a1a1;
     margin-left: 10px;
     margin-right: auto;
 }
 
 .sent-message {
-    background-color: #a1a1a1;
+    background-color: #56a5ec;
     margin-left: auto;
     margin-right: 10px;
 }
