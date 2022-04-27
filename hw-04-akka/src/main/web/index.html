@@ -12,57 +12,63 @@
 <body>
     <h1>Akka Chat</h1>
 
-    <div class="main-component">
-        <div>
-            <label for="id-input">enter username:</label><input id="id-input">
-            <button onclick=connect() id="id-button">Connect</button>
+    <div id="setup">
+        <div class="container">
+            <div><label for="room-input">chatroom name:</label><input id="room-input"></div>
+            <div><label for="id-input">username:</label><input id="id-input"></div>
+            <button onclick=connect() id="connect-button">Connect</button>
         </div>
+    </div>
 
+    <div class="main-component" hidden>
+        <h2 class="room-name">chatroom | </h2>
         <div>
             <label for="message-input">message: </label><input id="message-input">
             <button onclick=sendMessage()>Send</button>
         </div>
 
         <div id="chat-box">
-            <div class="message">hello!</div>
         </div>
     </div>
 
-
     <script>
         let socket;
-        let idBox = document.getElementById("id-input")
-        let inputBox = document.getElementById("message-input")
-        let chatBox = document.getElementById("chat-box")
-        let idButton = document.getElementById("id-button")
+        const idBox = document.getElementById("id-input")
+        const inputBox = document.getElementById("message-input")
+        const chatBox = document.getElementById("chat-box")
+        const setupComponent = document.getElementById("setup")
+        const mainComponent = document.getElementsByClassName("main-component")[0]
+        const roomLabel = document.getElementsByClassName("room-name")[0]
+        const roomBox = document.getElementById("room-input")
 
         function connect() {
-            let client_id = idBox.value
+            const username = idBox.value
+            const room_id = roomBox.value
 
-            if (client_id === "") {
+            if (username === "") {
                 alert("enter username")
                 return
             }
 
-            socket = new WebSocket(`ws://127.0.0.1:8090/message/${client_id}`);
+            socket = new WebSocket(`ws://127.0.0.1:8080/chat/${room_id}?username=${username}`);
 
             socket.onopen = function () {
                 console.log("socket opened");
+                roomLabel.innerHTML += room_id
+                setupComponent.hidden = true
+                mainComponent.hidden = false
             }
             
             socket.onerror = function (error) {
-                console.log(socket);
-                console.log(error);
+                alert(error)
             }
 
             socket.onmessage = function (event) {
-                let received_msg = event.data;
-                console.log(received_msg);
+                const received_msg = event.data;
 
-                chatBox.innerHTML += `<div class="message"> ${received_msg}</div>`
+                let messageType = received_msg.startsWith(username) ? "sent-message" : "received-message"
+                chatBox.innerHTML = `<div class="message ${messageType}"> ${received_msg}</div>` + chatBox.innerHTML
             };
-
-            idButton.hidden = true;
         }
 
         function sendMessage() {

@@ -2,9 +2,29 @@
     margin: 20px;
 }
 
+button {
+    color: inherit;
+    font: inherit;
+}
+
+input {
+    color: inherit;
+    font: inherit;
+}
+
+#connect-button {
+    width: 80px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .main-component {
     margin: 20px;
     padding: 20px;
+}
+
+.container {
+    display: grid;
 }
 
 h1 {
@@ -18,10 +38,21 @@ h1 {
 .message {
     height: 30px;
     width: fit-content;
-    background-color: #56a5ec;
     padding: 10px;
     color: white;
-    border-radius: 5px;
+    border-radius: 10px;
     text-align: center;
     margin: 5px;
+}
+
+.received-message {
+    background-color: #56a5ec;
+    margin-left: 10px;
+    margin-right: auto;
+}
+
+.sent-message {
+    background-color: #a1a1a1;
+    margin-left: auto;
+    margin-right: 10px;
 }
