@@ -22,13 +22,13 @@ object Chat extends App {
     })
   }
 
-  val handler =
+  val route =
     pathPrefix("chat" / Segment) { chatroom =>
       parameter("username") { username =>
         handleWebSocketMessages(Chat.getChatroom(chatroom).flow(username))
       }
     }
 
-  val binding = Http().newServerAt("127.0.0.1", 8080).bind(handler)
+  val binding = Http().newServerAt("127.0.0.1", 8080).bind(route)
   println("server started")
 }
