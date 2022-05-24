@@ -1,20 +1,11 @@
 package sr.ice.server;
-// **********************************************************************
-//
-// Copyright (c) 2003-2019 ZeroC, Inc. All rights reserved.
-//
-// This copy of Ice is licensed to you under the terms described in the
-// ICE_LICENSE file included in this distribution.
-//
-// **********************************************************************
 
 import com.zeroc.Ice.Communicator;
 import com.zeroc.Ice.Identity;
 import com.zeroc.Ice.ObjectAdapter;
 import com.zeroc.Ice.Util;
 
-public class Server
-{
+public class Server {
 	public void t1(String[] args) {
 		int status = 0;
 		Communicator communicator = null;
@@ -33,27 +24,29 @@ public class Server
 			ObjectAdapter adapter = communicator.createObjectAdapterWithEndpoints("Adapter1", "tcp -h 127.0.0.1 -p 10000 -z : udp -h 127.0.0.1 -p 10000 -z");
 
 			// 3. Stworzenie serwanta/serwantów
-			CalcI calcServant1 = new CalcI();
-			CalcI calcServant2 = new CalcI();
-			CalcI calcServant3 = new CalcI();
+			Lamp lamp1 = new Lamp();
+			RadioSpeaker radioSpeaker1 = new RadioSpeaker();
+			BTSpeaker btSpeaker1 = new BTSpeaker();
+			Camera camera1 = new Camera();
 
 			// 4. Dodanie wpisów do tablicy ASM, skojarzenie nazwy obiektu (Identity) z serwantem
-			adapter.add(calcServant1, new Identity("calc11", "calc"));
-			adapter.add(calcServant3, new Identity("calc33", "calc"));
-			adapter.add(calcServant2, new Identity("calc22", "calc"));
+			adapter.add(lamp1, new Identity("lamp1", "lamp"));
+			adapter.add(radioSpeaker1, new Identity("radioSpeaker1", "radio_speaker"));
+			adapter.add(btSpeaker1, new Identity("btSpeaker1", "bt_speaker"));
+			adapter.add(camera1, new Identity("camera1", "camera"));
 
 			// 5. Aktywacja adaptera i wejście w pętlę przetwarzania żądań
 			adapter.activate();
 			
 			System.out.println("Entering event processing loop...");
 			
-			communicator.waitForShutdown(); 		
-			
+			communicator.waitForShutdown();
 		}
 		catch (Exception e) {
 			System.err.println(e);
 			status = 1;
 		}
+
 		if (communicator != null) {
 			try {
 				communicator.destroy();
@@ -66,9 +59,7 @@ public class Server
 		System.exit(status);
 	}
 
-
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		Server app = new Server();
 		app.t1(args);
 	}
