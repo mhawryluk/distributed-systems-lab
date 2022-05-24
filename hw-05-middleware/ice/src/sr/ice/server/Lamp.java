@@ -13,6 +13,6 @@ public class Lamp implements LampI {
 
   @Override
   public void setColor(Color color, Current current) throws InvaildColorException {
-
+    System.out.println("color set: " + color);
   }
 }
