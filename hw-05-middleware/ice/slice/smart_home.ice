@@ -1,11 +1,8 @@
 module SmartHome {
 
-    exception InvaildColorException {};
-    struct Color {
-        int R;
-        int G;
-        int B;
-    };
+    interface Device {};
+
+    // SPEAKERS
 
     enum RadioStation {
         POP,
@@ -13,7 +10,7 @@ module SmartHome {
         LATIN
     };
 
-    interface SpeakerI {
+    interface SpeakerI extends Device {
         int getVolume();
         void volumeUp(int step);
         void volumeDown(int step);
@@ -32,10 +29,22 @@ module SmartHome {
         void setSong(Song song);
     };
 
-    interface LampI {
-        Color getColor();
-        void setColor(Color color) throws InvaildColorException;
+    // LAMPS
+
+    exception InvalidColorException {};
+    struct Color {
+        int R;
+        int G;
+        int B;
     };
+
+    interface LampI extends Device {
+        Color getColor();
+        void setColor(Color color) throws InvalidColorException;
+    };
+
+
+    // CAMERAS
 
     sequence <int> Row;
     sequence <Row> Image;
@@ -45,10 +54,10 @@ module SmartHome {
         int height;
     };
 
-    exception InvaildResolutionException {};
+    exception InvalidResolutionException {};
 
-    interface CameraI {
+    interface CameraI extends Device {
         Image getSnapshot();
-        void setResolution(Resolution resolution) throws InvaildResolutionException;
+        void setResolution(Resolution resolution) throws InvalidResolutionException;
     };
 };

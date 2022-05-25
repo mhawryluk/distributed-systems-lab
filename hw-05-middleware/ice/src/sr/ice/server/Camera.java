@@ -1,7 +1,7 @@
 package sr.ice.server;
 
 import SmartHome.CameraI;
-import SmartHome.InvaildResolutionException;
+import SmartHome.InvalidResolutionException;
 import SmartHome.Resolution;
 import com.zeroc.Ice.Current;
 
@@ -13,7 +13,7 @@ public class Camera implements CameraI {
   }
 
   @Override
-  public void setResolution(Resolution resolution, Current current) throws InvaildResolutionException {
+  public void setResolution(Resolution resolution, Current current) throws InvalidResolutionException {
 
   }
 }
