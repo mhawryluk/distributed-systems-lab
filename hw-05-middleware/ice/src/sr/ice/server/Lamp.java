@@ -6,13 +6,24 @@ import SmartHome.LampI;
 import com.zeroc.Ice.Current;
 
 public class Lamp implements LampI {
+
+  private Color color;
+
   @Override
   public Color getColor(Current current) {
-    return null;
+    return color;
   }
 
   @Override
   public void setColor(Color color, Current current) throws InvalidColorException {
-    System.out.println("color set: " + color.R + " " + color.G + " " + color.B);
+    if (color.R > 255 || color.R < 0 || color.G < 0 || color.G > 255 || color.B < 0 || color.B > 255)
+      throw new InvalidColorException();
+
+    this.color = color;
+    System.out.println("color set: " + colorToString(color));
+  }
+
+  private String colorToString(Color color) {
+    return "(" + color.R + ", " + color.G + ", " + color.B + ")";
   }
 }
