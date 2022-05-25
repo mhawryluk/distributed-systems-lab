@@ -12,8 +12,7 @@ module SmartHome {
 
     interface SpeakerI extends Device {
         int getVolume();
-        void volumeUp(int step);
-        void volumeDown(int step);
+        void volumeChange(int delta);
     };
 
     interface RadioSpeakerI extends SpeakerI {

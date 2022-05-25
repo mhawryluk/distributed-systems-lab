@@ -1,6 +1,6 @@
 import Ice
 import sys
-from SmartHome import LampIPrx, Color, RadioSpeakerIPrx, CameraIPrx, BTSpeakerIPrx, LampI
+from SmartHome import Resolution, Song, CameraI, LampIPrx, Color, RadioSpeakerIPrx, RadioSpeakerI, CameraIPrx, BTSpeakerIPrx, LampI, InvalidColorException, InvalidResolutionException, RadioStation
 from config import server_config, devices
 
 stubs = {}
@@ -24,23 +24,87 @@ def get_stub(communicator, name):
             return BTSpeakerIPrx.checkedCast(base)
         case 'camera':
             return CameraIPrx.checkedCast(base)
+        case _:
+            raise Exception(f"Unsupported category: {category}")
 
 
 def lamp_handle(communicator, name):
     stub: LampI = get_stub(communicator, name)
-    stub.setColor(Color(255, 128, 5))
-    print(stub.getColor())
+    command = input("command (setColor, getColor): ")
+
+    match command:
+        case 'setColor':
+            try:
+                r, g, b = input("r, g, b: ").split(', ')
+                r = int(r)
+                g = int(g)
+                b = int(b)
+
+                stub.setColor(Color(r, g, b))
+            except InvalidColorException as e:
+                print(e)
+            except Exception:
+                print("Invalid color format, must be r, g, b")
+
+        case 'getColor':
+            print(stub.getColor())
+        case _:
+            print('Invalid command')
 
 
 def radio_speaker_handle(communicator, name):
-    pass
+    stub: RadioSpeakerI = get_stub(communicator, name)
+    command = input("command (setStation, volumeChange, getVolume): ")
+
+    match command:
+        case 'setStation':
+            try:
+                station = input("station: ")
+                stub.setStation(getattr(RadioStation, station))
+            except Exception as e:
+                print("Invalid station")
+                print(e)
+        case 'getVolume':
+            print(stub.getVolume())
+        case 'volumeChange':
+            delta = int(input("delta: "))
+            stub.volumeChange(delta)
+        case _:
+            print('Invalid command')
 
 
 def bt_speaker_handle(communicator, name):
-    pass
+    stub: RadioSpeakerI = get_stub(communicator, name)
+    command = input("command (setSong, volumeChange, getVolume): ")
+
+    match command:
+        case 'setSong':
+            artist = input("artist: ")
+            title = input("title: ")
+            stub.setSong(Song(artist, title))
+        case 'getVolume':
+            print(stub.getVolume())
+        case 'volumeChange':
+            delta = int(input("delta: "))
+            stub.volumeChange(delta)
+        case _:
+            print('Invalid command')
+
 
 def camera_handle(communicator, name):
-    pass
+    stub: CameraI = get_stub(communicator, name)
+    command = input("command (getSnapshot, setResolution): ")
+
+    match command:
+        case 'setResolution':
+            width, height = input("resolution: width, height: ").split(", ")
+            width = int(width)
+            height = int(height)
+            stub.setResolution(Resolution(width, height))
+        case 'getSnapshot':
+            print(stub.getSnapshot())
+        case _:
+            print('Invalid command')
 
 
 def main():

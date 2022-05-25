@@ -21,127 +21,51 @@ import Ice, IcePy
 _M_SmartHome = Ice.openModule('SmartHome')
 __name__ = 'SmartHome'
 
-if 'InvaildColorException' not in _M_SmartHome.__dict__:
-    _M_SmartHome.InvaildColorException = Ice.createTempClass()
-    class InvaildColorException(Ice.UserException):
-        def __init__(self):
-            pass
+_M_SmartHome._t_Device = IcePy.defineValue('::SmartHome::Device', Ice.Value, -1, (), False, True, None, ())
+
+if 'DevicePrx' not in _M_SmartHome.__dict__:
+    _M_SmartHome.DevicePrx = Ice.createTempClass()
+    class DevicePrx(Ice.ObjectPrx):
+
+        @staticmethod
+        def checkedCast(proxy, facetOrContext=None, context=None):
+            return _M_SmartHome.DevicePrx.ice_checkedCast(proxy, '::SmartHome::Device', facetOrContext, context)
+
+        @staticmethod
+        def uncheckedCast(proxy, facet=None):
+            return _M_SmartHome.DevicePrx.ice_uncheckedCast(proxy, facet)
+
+        @staticmethod
+        def ice_staticId():
+            return '::SmartHome::Device'
+    _M_SmartHome._t_DevicePrx = IcePy.defineProxy('::SmartHome::Device', DevicePrx)
+
+    _M_SmartHome.DevicePrx = DevicePrx
+    del DevicePrx
+
+    _M_SmartHome.Device = Ice.createTempClass()
+    class Device(Ice.Object):
+
+        def ice_ids(self, current=None):
+            return ('::Ice::Object', '::SmartHome::Device')
+
+        def ice_id(self, current=None):
+            return '::SmartHome::Device'
+
+        @staticmethod
+        def ice_staticId():
+            return '::SmartHome::Device'
 
         def __str__(self):
-            return IcePy.stringifyException(self)
+            return IcePy.stringify(self, _M_SmartHome._t_DeviceDisp)
 
         __repr__ = __str__
 
-        _ice_id = '::SmartHome::InvaildColorException'
+    _M_SmartHome._t_DeviceDisp = IcePy.defineClass('::SmartHome::Device', Device, (), None, ())
+    Device._ice_type = _M_SmartHome._t_DeviceDisp
 
-    _M_SmartHome._t_InvaildColorException = IcePy.defineException('::SmartHome::InvaildColorException', InvaildColorException, (), False, None, ())
-    InvaildColorException._ice_type = _M_SmartHome._t_InvaildColorException
-
-    _M_SmartHome.InvaildColorException = InvaildColorException
-    del InvaildColorException
-
-if 'Color' not in _M_SmartHome.__dict__:
-    _M_SmartHome.Color = Ice.createTempClass()
-    class Color(object):
-        def __init__(self, R=0, G=0, B=0):
-            self.R = R
-            self.G = G
-            self.B = B
-
-        def __hash__(self):
-            _h = 0
-            _h = 5 * _h + Ice.getHash(self.R)
-            _h = 5 * _h + Ice.getHash(self.G)
-            _h = 5 * _h + Ice.getHash(self.B)
-            return _h % 0x7fffffff
-
-        def __compare(self, other):
-            if other is None:
-                return 1
-            elif not isinstance(other, _M_SmartHome.Color):
-                return NotImplemented
-            else:
-                if self.R is None or other.R is None:
-                    if self.R != other.R:
-                        return (-1 if self.R is None else 1)
-                else:
-                    if self.R < other.R:
-                        return -1
-                    elif self.R > other.R:
-                        return 1
-                if self.G is None or other.G is None:
-                    if self.G != other.G:
-                        return (-1 if self.G is None else 1)
-                else:
-                    if self.G < other.G:
-                        return -1
-                    elif self.G > other.G:
-                        return 1
-                if self.B is None or other.B is None:
-                    if self.B != other.B:
-                        return (-1 if self.B is None else 1)
-                else:
-                    if self.B < other.B:
-                        return -1
-                    elif self.B > other.B:
-                        return 1
-                return 0
-
-        def __lt__(self, other):
-            r = self.__compare(other)
-            if r is NotImplemented:
-                return r
-            else:
-                return r < 0
-
-        def __le__(self, other):
-            r = self.__compare(other)
-            if r is NotImplemented:
-                return r
-            else:
-                return r <= 0
-
-        def __gt__(self, other):
-            r = self.__compare(other)
-            if r is NotImplemented:
-                return r
-            else:
-                return r > 0
-
-        def __ge__(self, other):
-            r = self.__compare(other)
-            if r is NotImplemented:
-                return r
-            else:
-                return r >= 0
-
-        def __eq__(self, other):
-            r = self.__compare(other)
-            if r is NotImplemented:
-                return r
-            else:
-                return r == 0
-
-        def __ne__(self, other):
-            r = self.__compare(other)
-            if r is NotImplemented:
-                return r
-            else:
-                return r != 0
-
-        def __str__(self):
-            return IcePy.stringify(self, _M_SmartHome._t_Color)
-
-        __repr__ = __str__
-
-    _M_SmartHome._t_Color = IcePy.defineStruct('::SmartHome::Color', Color, (), (
-        ('R', (), IcePy._t_int),
-        ('G', (), IcePy._t_int),
-        ('B', (), IcePy._t_int)
-    ))
-
-    _M_SmartHome.Color = Color
-    del Color
+    _M_SmartHome.Device = Device
+    del Device
 
 if 'RadioStation' not in _M_SmartHome.__dict__:
     _M_SmartHome.RadioStation = Ice.createTempClass()
@@ -170,7 +94,7 @@ _M_SmartHome._t_SpeakerI = IcePy.defineValue('::SmartHome::SpeakerI', Ice.Value,
 
 if 'SpeakerIPrx' not in _M_SmartHome.__dict__:
     _M_SmartHome.SpeakerIPrx = Ice.createTempClass()
-    class SpeakerIPrx(Ice.ObjectPrx):
+    class SpeakerIPrx(_M_SmartHome.DevicePrx):
 
         def getVolume(self, context=None):
             return _M_SmartHome.SpeakerI._op_getVolume.invoke(self, ((), context))
@@ -184,29 +108,17 @@ if 'SpeakerIPrx' not in _M_SmartHome.__dict__:
         def end_getVolume(self, _r):
             return _M_SmartHome.SpeakerI._op_getVolume.end(self, _r)
 
-        def volumeUp(self, step, context=None):
-            return _M_SmartHome.SpeakerI._op_volumeUp.invoke(self, ((step, ), context))
+        def volumeChange(self, delta, context=None):
+            return _M_SmartHome.SpeakerI._op_volumeChange.invoke(self, ((delta, ), context))
 
-        def volumeUpAsync(self, step, context=None):
-            return _M_SmartHome.SpeakerI._op_volumeUp.invokeAsync(self, ((step, ), context))
+        def volumeChangeAsync(self, delta, context=None):
+            return _M_SmartHome.SpeakerI._op_volumeChange.invokeAsync(self, ((delta, ), context))
 
-        def begin_volumeUp(self, step, _response=None, _ex=None, _sent=None, context=None):
-            return _M_SmartHome.SpeakerI._op_volumeUp.begin(self, ((step, ), _response, _ex, _sent, context))
+        def begin_volumeChange(self, delta, _response=None, _ex=None, _sent=None, context=None):
+            return _M_SmartHome.SpeakerI._op_volumeChange.begin(self, ((delta, ), _response, _ex, _sent, context))
 
-        def end_volumeUp(self, _r):
-            return _M_SmartHome.SpeakerI._op_volumeUp.end(self, _r)
-
-        def volumeDown(self, step, context=None):
-            return _M_SmartHome.SpeakerI._op_volumeDown.invoke(self, ((step, ), context))
-
-        def volumeDownAsync(self, step, context=None):
-            return _M_SmartHome.SpeakerI._op_volumeDown.invokeAsync(self, ((step, ), context))
-
-        def begin_volumeDown(self, step, _response=None, _ex=None, _sent=None, context=None):
-            return _M_SmartHome.SpeakerI._op_volumeDown.begin(self, ((step, ), _response, _ex, _sent, context))
-
-        def end_volumeDown(self, _r):
-            return _M_SmartHome.SpeakerI._op_volumeDown.end(self, _r)
+        def end_volumeChange(self, _r):
+            return _M_SmartHome.SpeakerI._op_volumeChange.end(self, _r)
 
         @staticmethod
         def checkedCast(proxy, facetOrContext=None, context=None):
@@ -225,10 +137,10 @@ if 'SpeakerIPrx' not in _M_SmartHome.__dict__:
     del SpeakerIPrx
 
     _M_SmartHome.SpeakerI = Ice.createTempClass()
-    class SpeakerI(Ice.Object):
+    class SpeakerI(_M_SmartHome.Device):
 
         def ice_ids(self, current=None):
-            return ('::Ice::Object', '::SmartHome::SpeakerI')
+            return ('::Ice::Object', '::SmartHome::Device', '::SmartHome::SpeakerI')
 
         def ice_id(self, current=None):
             return '::SmartHome::SpeakerI'
@@ -240,23 +152,19 @@ if 'SpeakerIPrx' not in _M_SmartHome.__dict__:
         def getVolume(self, current=None):
             raise NotImplementedError("servant method 'getVolume' not implemented")
 
-        def volumeUp(self, step, current=None):
-            raise NotImplementedError("servant method 'volumeUp' not implemented")
-
-        def volumeDown(self, step, current=None):
-            raise NotImplementedError("servant method 'volumeDown' not implemented")
+        def volumeChange(self, delta, current=None):
+            raise NotImplementedError("servant method 'volumeChange' not implemented")
 
         def __str__(self):
             return IcePy.stringify(self, _M_SmartHome._t_SpeakerIDisp)
 
         __repr__ = __str__
 
-    _M_SmartHome._t_SpeakerIDisp = IcePy.defineClass('::SmartHome::SpeakerI', SpeakerI, (), None, ())
+    _M_SmartHome._t_SpeakerIDisp = IcePy.defineClass('::SmartHome::SpeakerI', SpeakerI, (), None, (_M_SmartHome._t_DeviceDisp,))
     SpeakerI._ice_type = _M_SmartHome._t_SpeakerIDisp
 
     SpeakerI._op_getVolume = IcePy.Operation('getVolume', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (), (), ((), IcePy._t_int, False, 0), ())
-    SpeakerI._op_volumeUp = IcePy.Operation('volumeUp', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), IcePy._t_int, False, 0),), (), None, ())
-    SpeakerI._op_volumeDown = IcePy.Operation('volumeDown', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), IcePy._t_int, False, 0),), (), None, ())
+    SpeakerI._op_volumeChange = IcePy.Operation('volumeChange', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), IcePy._t_int, False, 0),), (), None, ())
 
     _M_SmartHome.SpeakerI = SpeakerI
     del SpeakerI
@@ -299,7 +207,7 @@ if 'RadioSpeakerIPrx' not in _M_SmartHome.__dict__:
     class RadioSpeakerI(_M_SmartHome.SpeakerI):
 
         def ice_ids(self, current=None):
-            return ('::Ice::Object', '::SmartHome::RadioSpeakerI', '::SmartHome::SpeakerI')
+            return ('::Ice::Object', '::SmartHome::Device', '::SmartHome::RadioSpeakerI', '::SmartHome::SpeakerI')
 
         def ice_id(self, current=None):
             return '::SmartHome::RadioSpeakerI'
@@ -454,7 +362,7 @@ if 'BTSpeakerIPrx' not in _M_SmartHome.__dict__:
     class BTSpeakerI(_M_SmartHome.SpeakerI):
 
         def ice_ids(self, current=None):
-            return ('::Ice::Object', '::SmartHome::BTSpeakerI', '::SmartHome::SpeakerI')
+            return ('::Ice::Object', '::SmartHome::BTSpeakerI', '::SmartHome::Device', '::SmartHome::SpeakerI')
 
         def ice_id(self, current=None):
             return '::SmartHome::BTSpeakerI'
@@ -479,11 +387,133 @@ if 'BTSpeakerIPrx' not in _M_SmartHome.__dict__:
     _M_SmartHome.BTSpeakerI = BTSpeakerI
     del BTSpeakerI
 
+if 'InvalidColorException' not in _M_SmartHome.__dict__:
+    _M_SmartHome.InvalidColorException = Ice.createTempClass()
+    class InvalidColorException(Ice.UserException):
+        def __init__(self):
+            pass
+
+        def __str__(self):
+            return IcePy.stringifyException(self)
+
+        __repr__ = __str__
+
+        _ice_id = '::SmartHome::InvalidColorException'
+
+    _M_SmartHome._t_InvalidColorException = IcePy.defineException('::SmartHome::InvalidColorException', InvalidColorException, (), False, None, ())
+    InvalidColorException._ice_type = _M_SmartHome._t_InvalidColorException
+
+    _M_SmartHome.InvalidColorException = InvalidColorException
+    del InvalidColorException
+
+if 'Color' not in _M_SmartHome.__dict__:
+    _M_SmartHome.Color = Ice.createTempClass()
+    class Color(object):
+        def __init__(self, R=0, G=0, B=0):
+            self.R = R
+            self.G = G
+            self.B = B
+
+        def __hash__(self):
+            _h = 0
+            _h = 5 * _h + Ice.getHash(self.R)
+            _h = 5 * _h + Ice.getHash(self.G)
+            _h = 5 * _h + Ice.getHash(self.B)
+            return _h % 0x7fffffff
+
+        def __compare(self, other):
+            if other is None:
+                return 1
+            elif not isinstance(other, _M_SmartHome.Color):
+                return NotImplemented
+            else:
+                if self.R is None or other.R is None:
+                    if self.R != other.R:
+                        return (-1 if self.R is None else 1)
+                else:
+                    if self.R < other.R:
+                        return -1
+                    elif self.R > other.R:
+                        return 1
+                if self.G is None or other.G is None:
+                    if self.G != other.G:
+                        return (-1 if self.G is None else 1)
+                else:
+                    if self.G < other.G:
+                        return -1
+                    elif self.G > other.G:
+                        return 1
+                if self.B is None or other.B is None:
+                    if self.B != other.B:
+                        return (-1 if self.B is None else 1)
+                else:
+                    if self.B < other.B:
+                        return -1
+                    elif self.B > other.B:
+                        return 1
+                return 0
+
+        def __lt__(self, other):
+            r = self.__compare(other)
+            if r is NotImplemented:
+                return r
+            else:
+                return r < 0
+
+        def __le__(self, other):
+            r = self.__compare(other)
+            if r is NotImplemented:
+                return r
+            else:
+                return r <= 0
+
+        def __gt__(self, other):
+            r = self.__compare(other)
+            if r is NotImplemented:
+                return r
+            else:
+                return r > 0
+
+        def __ge__(self, other):
+            r = self.__compare(other)
+            if r is NotImplemented:
+                return r
+            else:
+                return r >= 0
+
+        def __eq__(self, other):
+            r = self.__compare(other)
+            if r is NotImplemented:
+                return r
+            else:
+                return r == 0
+
+        def __ne__(self, other):
+            r = self.__compare(other)
+            if r is NotImplemented:
+                return r
+            else:
+                return r != 0
+
+        def __str__(self):
+            return IcePy.stringify(self, _M_SmartHome._t_Color)
+
+        __repr__ = __str__
+
+    _M_SmartHome._t_Color = IcePy.defineStruct('::SmartHome::Color', Color, (), (
+        ('R', (), IcePy._t_int),
+        ('G', (), IcePy._t_int),
+        ('B', (), IcePy._t_int)
+    ))
+
+    _M_SmartHome.Color = Color
+    del Color
+
 _M_SmartHome._t_LampI = IcePy.defineValue('::SmartHome::LampI', Ice.Value, -1, (), False, True, None, ())
 
 if 'LampIPrx' not in _M_SmartHome.__dict__:
     _M_SmartHome.LampIPrx = Ice.createTempClass()
-    class LampIPrx(Ice.ObjectPrx):
+    class LampIPrx(_M_SmartHome.DevicePrx):
 
         def getColor(self, context=None):
             return _M_SmartHome.LampI._op_getColor.invoke(self, ((), context))
@@ -526,10 +556,10 @@ if 'LampIPrx' not in _M_SmartHome.__dict__:
     del LampIPrx
 
     _M_SmartHome.LampI = Ice.createTempClass()
-    class LampI(Ice.Object):
+    class LampI(_M_SmartHome.Device):
 
         def ice_ids(self, current=None):
-            return ('::Ice::Object', '::SmartHome::LampI')
+            return ('::Ice::Object', '::SmartHome::Device', '::SmartHome::LampI')
 
         def ice_id(self, current=None):
             return '::SmartHome::LampI'
@@ -549,11 +579,11 @@ if 'LampIPrx' not in _M_SmartHome.__dict__:
 
         __repr__ = __str__
 
-    _M_SmartHome._t_LampIDisp = IcePy.defineClass('::SmartHome::LampI', LampI, (), None, ())
+    _M_SmartHome._t_LampIDisp = IcePy.defineClass('::SmartHome::LampI', LampI, (), None, (_M_SmartHome._t_DeviceDisp,))
     LampI._ice_type = _M_SmartHome._t_LampIDisp
 
     LampI._op_getColor = IcePy.Operation('getColor', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (), (), ((), _M_SmartHome._t_Color, False, 0), ())
-    LampI._op_setColor = IcePy.Operation('setColor', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), _M_SmartHome._t_Color, False, 0),), (), None, (_M_SmartHome._t_InvaildColorException,))
+    LampI._op_setColor = IcePy.Operation('setColor', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), _M_SmartHome._t_Color, False, 0),), (), None, (_M_SmartHome._t_InvalidColorException,))
 
     _M_SmartHome.LampI = LampI
     del LampI
@@ -656,9 +686,9 @@ if 'Resolution' not in _M_SmartHome.__dict__:
     _M_SmartHome.Resolution = Resolution
     del Resolution
 
-if 'InvaildResolutionException' not in _M_SmartHome.__dict__:
-    _M_SmartHome.InvaildResolutionException = Ice.createTempClass()
-    class InvaildResolutionException(Ice.UserException):
+if 'InvalidResolutionException' not in _M_SmartHome.__dict__:
+    _M_SmartHome.InvalidResolutionException = Ice.createTempClass()
+    class InvalidResolutionException(Ice.UserException):
         def __init__(self):
             pass
 
@@ -667,19 +697,19 @@ if 'InvaildResolutionException' not in _M_SmartHome.__dict__:
 
         __repr__ = __str__
 
-        _ice_id = '::SmartHome::InvaildResolutionException'
+        _ice_id = '::SmartHome::InvalidResolutionException'
 
-    _M_SmartHome._t_InvaildResolutionException = IcePy.defineException('::SmartHome::InvaildResolutionException', InvaildResolutionException, (), False, None, ())
-    InvaildResolutionException._ice_type = _M_SmartHome._t_InvaildResolutionException
+    _M_SmartHome._t_InvalidResolutionException = IcePy.defineException('::SmartHome::InvalidResolutionException', InvalidResolutionException, (), False, None, ())
+    InvalidResolutionException._ice_type = _M_SmartHome._t_InvalidResolutionException
 
-    _M_SmartHome.InvaildResolutionException = InvaildResolutionException
-    del InvaildResolutionException
+    _M_SmartHome.InvalidResolutionException = InvalidResolutionException
+    del InvalidResolutionException
 
 _M_SmartHome._t_CameraI = IcePy.defineValue('::SmartHome::CameraI', Ice.Value, -1, (), False, True, None, ())
 
 if 'CameraIPrx' not in _M_SmartHome.__dict__:
     _M_SmartHome.CameraIPrx = Ice.createTempClass()
-    class CameraIPrx(Ice.ObjectPrx):
+    class CameraIPrx(_M_SmartHome.DevicePrx):
 
         def getSnapshot(self, context=None):
             return _M_SmartHome.CameraI._op_getSnapshot.invoke(self, ((), context))
@@ -722,10 +752,10 @@ if 'CameraIPrx' not in _M_SmartHome.__dict__:
     del CameraIPrx
 
     _M_SmartHome.CameraI = Ice.createTempClass()
-    class CameraI(Ice.Object):
+    class CameraI(_M_SmartHome.Device):
 
         def ice_ids(self, current=None):
-            return ('::Ice::Object', '::SmartHome::CameraI')
+            return ('::Ice::Object', '::SmartHome::CameraI', '::SmartHome::Device')
 
         def ice_id(self, current=None):
             return '::SmartHome::CameraI'
@@ -745,11 +775,11 @@ if 'CameraIPrx' not in _M_SmartHome.__dict__:
 
         __repr__ = __str__
 
-    _M_SmartHome._t_CameraIDisp = IcePy.defineClass('::SmartHome::CameraI', CameraI, (), None, ())
+    _M_SmartHome._t_CameraIDisp = IcePy.defineClass('::SmartHome::CameraI', CameraI, (), None, (_M_SmartHome._t_DeviceDisp,))
     CameraI._ice_type = _M_SmartHome._t_CameraIDisp
 
     CameraI._op_getSnapshot = IcePy.Operation('getSnapshot', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (), (), ((), _M_SmartHome._t_Image, False, 0), ())
-    CameraI._op_setResolution = IcePy.Operation('setResolution', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), _M_SmartHome._t_Resolution, False, 0),), (), None, (_M_SmartHome._t_InvaildResolutionException,))
+    CameraI._op_setResolution = IcePy.Operation('setResolution', Ice.OperationMode.Normal, Ice.OperationMode.Normal, False, None, (), (((), _M_SmartHome._t_Resolution, False, 0),), (), None, (_M_SmartHome._t_InvalidResolutionException,))
 
     _M_SmartHome.CameraI = CameraI
     del CameraI
