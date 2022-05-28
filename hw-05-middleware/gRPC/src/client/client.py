@@ -1,53 +1,68 @@
-from time import sleep
-
 import grpc
-from google.protobuf.descriptor import MethodDescriptor
-from google.protobuf.message_factory import MessageFactory
-from grpc_reflection.v1alpha import reflection_pb2_grpc
-from grpc_reflection.v1alpha.proto_reflection_descriptor_database import ProtoReflectionDescriptorDatabase
 from google.protobuf.descriptor_pool import DescriptorPool
-from google.protobuf import descriptor_pb2, descriptor_pool as _descriptor_pool, symbol_database as _symbol_database
+from google.protobuf.message_factory import MessageFactory
+from grpc_reflection.v1alpha.proto_reflection_descriptor_database import ProtoReflectionDescriptorDatabase
 
-channel = grpc.insecure_channel("localhost:50051", [("content-type", "text/plain")])
+channel = grpc.insecure_channel("localhost:50051")
 reflection_db = ProtoReflectionDescriptorDatabase(channel)
-services = reflection_db.get_services()
-
 desc_pool = DescriptorPool(reflection_db)
 
-service_desc = desc_pool.FindServiceByName("calculator.Calculator")
-method_desc = service_desc.FindMethodByName("Add")
+# listing all offered services
+print("SERVICES:")
+for service_name in reflection_db.get_services():
+    print("-", service_name)
+print()
 
-request_desc = desc_pool.FindMessageTypeByName("calculator.ArithmeticOpArguments")
-request = MessageFactory(desc_pool).GetPrototype(request_desc)(arg1=5, arg2=10)
+# getting service descriptor
+service_desc = desc_pool.FindServiceByName("colors.ChangeMode")
 
+# listing all methods of a service
+print(f"METHODS of {service_desc.full_name}:")
+for method_desc in service_desc.methods:
+    print("-", method_desc.name)
+print()
 
-service_full_name = service_desc.full_name
+# getting method descriptor
+method_desc = service_desc.FindMethodByName("RGBToHSV")
 
-for method_proto in service_desc.methods:
-    method_name = method_proto.name
-    print(method_name)
-    method_desc: MethodDescriptor = service_desc.methods_by_name[method_name]
-#
-    input_type = _symbol_database.Default().GetPrototype(method_desc.input_type)
-    output_type = _symbol_database.Default().GetPrototype(method_desc.output_type)
+# listing information about the method
+print(f"Descriptor of {method_desc.full_name}:")
+print("- containing service:", method_desc.containing_service.name)
+print("- client stream?", method_desc.client_streaming)
+print("- server stream?", method_desc.server_streaming)
+print("- input type:", method_desc.input_type.name)
+print("- output type:", method_desc.output_type.name)
+print("- index:", method_desc.index)
+print()
 
-    # method_type = MethodTypeMatch[(method_proto.client_streaming, method_proto.server_streaming)]
-    method_type = 'unary_unary'
-#
-    method_register_func = channel.unary_unary
-    handler = method_register_func(
-        method=f'/{service_full_name}/{method_name}',
-        request_serializer=input_type.SerializeToString,
-        response_deserializer=output_type.FromString
-    )
+# getting message descriptor and types
 
-    print(handler(request))
+# by name:
+message_desc = desc_pool.FindMessageTypeByName("colors.RGBColor")
+RGBColor = MessageFactory(desc_pool).GetPrototype(message_desc)
 
-#     metadata[method_name] = MethodMetaData(
-#         method_type=method_type,
-#         input_type=input_type,
-#         output_type=output_type,
-#         handler=handler
-#     )
-# return metadata
+# from method descriptor:
+HSVColor = MessageFactory(desc_pool).GetPrototype(method_desc.output_type)
 
+# creating and sending a request
+request = RGBColor(r=255, g=255, b=128)
+
+print(f"SENDING REQUEST to RGBToHSV method passing:\n{request}")
+response = channel.unary_unary(
+        method='/colors.ChangeMode/RGBToHSV',
+        request_serializer=RGBColor.SerializeToString,
+        response_deserializer=HSVColor.FromString
+    )(request)
+
+print(f"RESPONSE:\n{response}")
+
+request = HSVColor(h=.5, s=.7, v=.1)
+
+print(f"SENDING REQUEST to HSVToRGB method passing:\n{request}")
+response = channel.unary_unary(
+        method='/colors.ChangeMode/HSVToRGB',
+        request_serializer=HSVColor.SerializeToString,
+        response_deserializer=RGBColor.FromString
+    )(request)
+
+print(f"RESPONSE:\n{response}")
