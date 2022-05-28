@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package colors;
+
+message RGBColor {
+  int32 r = 1;
+  int32 g = 2;
+  int32 b = 3;
+}
+
+message HSVColor {
+  float h = 1;
+  float s = 2;
+  float v = 3;
+}
+
+service ChangeMode {
+  rpc RGBToHSV (RGBColor) returns (HSVColor) {}
+  rpc HSVToRGB (HSVColor) returns (RGBColor) {}
+}

@@ -1,0 +1,1 @@
+./protoc -I . --java_out=gen --plugin=protoc-gen-grpc-java=protoc-gen-grpc-java-1.45.1-osx-x86_64.exe --grpc-java_out=gen colors.proto
