@@ -1,16 +1,30 @@
 import Ice
 import sys
-from SmartHome import Resolution, Song, CameraI, LampIPrx, Color, RadioSpeakerIPrx, RadioSpeakerI, CameraIPrx, BTSpeakerIPrx, LampI, InvalidColorException, InvalidResolutionException, RadioStation
-from config import server_config, devices
+from SmartHome import HomeInfoIPrx, Resolution, Song, CameraI, LampIPrx, Color, RadioSpeakerIPrx, RadioSpeakerI, CameraIPrx, BTSpeakerIPrx, LampI, InvalidColorException, InvalidResolutionException, RadioStation
+from config import server_config
 
 stubs = {}
+devices = {}
 
+def get_device_lists(communicator):
+    for port, server in server_config.items():
+        base = communicator.stringToProxy(f"home_info/home_info: {server}")
+        stub = HomeInfoIPrx.checkedCast(base)
+        listed_devices = stub.listDevices()
+        print(f"--- server: {port} ---")
+        print("available devices", listed_devices)
+
+        for device in listed_devices:
+            devices[device.name] = {
+                "category": device.category,
+                "port": device.serverPort
+            }
 
 def get_stub(communicator, name):
     if name in stubs:
         return stubs[name]
 
-    server = server_config[devices[name]["server"]]
+    server = server_config[devices[name]["port"]]
     category = devices[name]["category"]
 
     base = communicator.stringToProxy(f"{category}/{name}: {server}")
@@ -109,6 +123,8 @@ def camera_handle(communicator, name):
 
 def main():
     with Ice.initialize(sys.argv) as communicator:
+        get_device_lists(communicator)
+
         while True:
             try:
                 device_name = input("device: ")

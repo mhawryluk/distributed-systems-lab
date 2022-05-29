@@ -5,7 +5,7 @@ import Ice
 Ice.updateModule("SmartHome")
 
 import sys
-sys.path.append("generated/Smarthome/")
+sys.path.append("generated/")
 
 # Modules:
 import smart_home_ice

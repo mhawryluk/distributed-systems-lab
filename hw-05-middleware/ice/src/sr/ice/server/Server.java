@@ -1,6 +1,7 @@
 package sr.ice.server;
 
 import SmartHome.Device;
+import SmartHome.DeviceId;
 import com.zeroc.Ice.Communicator;
 import com.zeroc.Ice.Identity;
 import com.zeroc.Ice.ObjectAdapter;
@@ -12,6 +13,8 @@ public class Server {
 		int status = 0;
 		Communicator communicator = null;
 
+		DeviceId[] devices = new DeviceId[args.length - 3];
+
 		try	{
 			// 1. Inicjalizacja ICE - utworzenie communicatora
 			communicator = Util.initialize(new String[]{args[0]});
@@ -20,11 +23,15 @@ public class Server {
 			// METODA 1 (polecana produkcyjnie): Konfiguracja adaptera Adapter1 jest w pliku konfiguracyjnym podanym jako parametr uruchomienia serwera
 			ObjectAdapter adapter = communicator.createObjectAdapter(args[1]);
 
+			int port = Integer.parseInt(args[2]);
+
 			// 3. Stworzenie serwanta/serwantów
-			for (int i = 2; i < args.length; i++) {
+			for (int i = 3; i < args.length; i++) {
 				String[] deviceSpec = args[i].split("/");
 				String category = deviceSpec[0];
 				String name = deviceSpec[1];
+
+				devices[i-3] = new DeviceId(name, category, port);
 
 				System.out.println("category: " + category + " | name: " + name);
 
@@ -39,6 +46,10 @@ public class Server {
 				// 4. Dodanie wpisów do tablicy ASM, skojarzenie nazwy obiektu (Identity) z serwantem
 				adapter.add(device, new Identity(name, category));
 			}
+
+			HomeInfo.setDevices(devices);
+			HomeInfo homeInfoServant = new HomeInfo();
+			adapter.add(homeInfoServant, new Identity("home_info", "home_info"));
 
 			// 5. Aktywacja adaptera i wejście w pętlę przetwarzania żądań
 			adapter.activate();

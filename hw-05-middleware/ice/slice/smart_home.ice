@@ -59,4 +59,18 @@ module SmartHome {
         Image getSnapshot();
         void setResolution(Resolution resolution) throws InvalidResolutionException;
     };
+
+    // Home Info
+
+    struct DeviceId {
+        string name;
+        string category;
+        int serverPort;
+    };
+
+    sequence <DeviceId> devicesList;
+
+    interface HomeInfoI {
+        devicesList listDevices();
+    };
 };
