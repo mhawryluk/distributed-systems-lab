@@ -8,6 +8,11 @@ import com.zeroc.Ice.Current;
 public class Lamp implements LampI {
 
   private Color color;
+  private final String deviceName;
+
+  public Lamp(String deviceName) {
+    this.deviceName = deviceName;
+  }
 
   @Override
   public Color getColor(Current current) {
@@ -20,7 +25,7 @@ public class Lamp implements LampI {
       throw new InvalidColorException();
 
     this.color = color;
-    System.out.println("color set: " + colorToString(color));
+    System.out.println(deviceName + " | " + "Color set: " + colorToString(color));
   }
 
   private String colorToString(Color color) {

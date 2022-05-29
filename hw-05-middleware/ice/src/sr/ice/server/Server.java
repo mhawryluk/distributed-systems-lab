@@ -36,10 +36,10 @@ public class Server {
 				System.out.println("category: " + category + " | name: " + name);
 
 				Device device = switch (category) {
-					case "lamp" -> new Lamp();
-					case "radio_speaker" -> new RadioSpeaker();
-					case "bt_speaker" -> new BTSpeaker();
-					case "camera" -> new Camera();
+					case "lamp" -> new Lamp(name);
+					case "radio_speaker" -> new RadioSpeaker(name);
+					case "bt_speaker" -> new BTSpeaker(name);
+					case "camera" -> new Camera(name);
 					default -> throw new IllegalArgumentException("not supported category");
 				};
 

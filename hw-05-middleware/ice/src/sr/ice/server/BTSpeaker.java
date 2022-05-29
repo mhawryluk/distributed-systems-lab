@@ -8,10 +8,14 @@ public class BTSpeaker extends Speaker implements BTSpeakerI {
 
   private Song song;
 
+  public BTSpeaker(String deviceName) {
+    super(deviceName);
+  }
+
   @Override
   public void setSong(Song song, Current current) {
     this.song = song;
-    System.out.println("Song set: " + songToString(this.song));
+    System.out.println(deviceName + " | " + "Song set: " + songToString(this.song));
 
   }
 

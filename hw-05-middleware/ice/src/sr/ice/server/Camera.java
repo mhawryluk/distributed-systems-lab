@@ -12,6 +12,11 @@ public class Camera implements CameraI {
   private int width = 32;
   private int height = 16;
 
+  private final String deviceName;
+
+  public Camera(String deviceName) {
+    this.deviceName = deviceName;
+  }
 
   @Override
   public int[][] getSnapshot(Current current) {
@@ -30,6 +35,6 @@ public class Camera implements CameraI {
     this.width = resolution.width;
     this.height = resolution.height;
 
-    System.out.println("Set resolution: " + this.width + " x " + this.height);
+    System.out.println(deviceName + " | " + "Set resolution: " + this.width + " x " + this.height);
   }
 }

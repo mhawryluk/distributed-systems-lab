@@ -16,7 +16,7 @@ module SmartHome {
     };
 
     interface RadioSpeakerI extends SpeakerI {
-        void setStation(RadioStation station);
+        idempotent void setStation(RadioStation station);
     };
 
     struct Song {
@@ -25,7 +25,7 @@ module SmartHome {
     };
 
     interface BTSpeakerI extends SpeakerI {
-        void setSong(Song song);
+        idempotent void setSong(Song song);
     };
 
     // LAMPS
@@ -39,7 +39,7 @@ module SmartHome {
 
     interface LampI extends Device {
         Color getColor();
-        void setColor(Color color) throws InvalidColorException;
+        idempotent void setColor(Color color) throws InvalidColorException;
     };
 
 
@@ -57,7 +57,7 @@ module SmartHome {
 
     interface CameraI extends Device {
         Image getSnapshot();
-        void setResolution(Resolution resolution) throws InvalidResolutionException;
+        idempotent void setResolution(Resolution resolution) throws InvalidResolutionException;
     };
 
     // Home Info
@@ -71,6 +71,6 @@ module SmartHome {
     sequence <DeviceId> devicesList;
 
     interface HomeInfoI {
-        devicesList listDevices();
+        idempotent devicesList listDevices();
     };
 };

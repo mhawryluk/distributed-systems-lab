@@ -127,23 +127,26 @@ def main():
 
         while True:
             try:
-                device_name = input("device: ")
+                device_name = input("\ndevice: ")
             except KeyboardInterrupt:
                 break
 
             if device_name not in devices:
                 print(f"\"{device_name}\" is unavailable")
                 continue
-
-            match devices[device_name]["category"]:
-                case 'lamp':
-                    lamp_handle(communicator, device_name)
-                case 'radio_speaker':
-                    radio_speaker_handle(communicator, device_name)
-                case 'bt_speaker':
-                    bt_speaker_handle(communicator, device_name)
-                case 'camera':
-                    camera_handle(communicator, device_name)
+            
+            try:
+                match devices[device_name]["category"]:
+                    case 'lamp':
+                        lamp_handle(communicator, device_name)
+                    case 'radio_speaker':
+                        radio_speaker_handle(communicator, device_name)
+                    case 'bt_speaker':
+                        bt_speaker_handle(communicator, device_name)
+                    case 'camera':
+                        camera_handle(communicator, device_name)
+            except Exception as e:
+                print(e)
 
 
 if __name__ == '__main__':

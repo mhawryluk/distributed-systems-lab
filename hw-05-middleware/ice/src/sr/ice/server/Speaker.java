@@ -5,13 +5,18 @@ import com.zeroc.Ice.Current;
 
 public class Speaker implements SpeakerI {
 
+  protected final String deviceName;
   private int volume;
   private final int maxVolume = 10;
   private final int minVolume = 0;
 
+  public Speaker(String deviceName) {
+    this.deviceName = deviceName;
+  }
+
   @Override
   public int getVolume(Current current) {
-    return 0;
+    return volume;
   }
 
   @Override
@@ -20,6 +25,6 @@ public class Speaker implements SpeakerI {
     volume = Math.max(volume, minVolume);
     volume = Math.min(volume, maxVolume);
 
-    System.out.println("New volume: " + volume);
+    System.out.println(deviceName + " | " + "New volume: " + volume);
   }
 }
