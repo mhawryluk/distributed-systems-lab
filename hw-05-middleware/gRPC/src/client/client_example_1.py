@@ -4,8 +4,8 @@ from google.protobuf.message_factory import MessageFactory
 from grpc_reflection.v1alpha.proto_reflection_descriptor_database import ProtoReflectionDescriptorDatabase
 
 SERVER_ADDRESS = "localhost:50051"
-SERVICE_NAME = "colors.ChangeMode"
-METHOD_NAME = "RGBToHSV"
+SERVICE_NAME = "colors.ColorTransform"
+METHOD_NAME = "HSVToRGB"
 
 channel = grpc.insecure_channel(SERVER_ADDRESS)
 reflection_db = ProtoReflectionDescriptorDatabase(channel)

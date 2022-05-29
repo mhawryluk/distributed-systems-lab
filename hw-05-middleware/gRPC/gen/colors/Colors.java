@@ -14,6 +14,114 @@ public final class Colors {
     registerAllExtensions(
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
+  /**
+   * Protobuf enum {@code colors.OperationType}
+   */
+  public enum OperationType
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>AVERAGE = 0;</code>
+     */
+    AVERAGE(0),
+    /**
+     * <code>MAX = 1;</code>
+     */
+    MAX(1),
+    UNRECOGNIZED(-1),
+    ;
+
+    /**
+     * <code>AVERAGE = 0;</code>
+     */
+    public static final int AVERAGE_VALUE = 0;
+    /**
+     * <code>MAX = 1;</code>
+     */
+    public static final int MAX_VALUE = 1;
+
+
+    public final int getNumber() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalArgumentException(
+            "Can't get the number of an unknown enum value.");
+      }
+      return value;
+    }
+
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     * @deprecated Use {@link #forNumber(int)} instead.
+     */
+    @java.lang.Deprecated
+    public static OperationType valueOf(int value) {
+      return forNumber(value);
+    }
+
+    /**
+     * @param value The numeric wire value of the corresponding enum entry.
+     * @return The enum associated with the given numeric wire value.
+     */
+    public static OperationType forNumber(int value) {
+      switch (value) {
+        case 0: return AVERAGE;
+        case 1: return MAX;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<OperationType>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static final com.google.protobuf.Internal.EnumLiteMap<
+        OperationType> internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<OperationType>() {
+            public OperationType findValueByNumber(int number) {
+              return OperationType.forNumber(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      if (this == UNRECOGNIZED) {
+        throw new java.lang.IllegalStateException(
+            "Can't get the descriptor of an unrecognized enum value.");
+      }
+      return getDescriptor().getValues().get(ordinal());
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return colors.Colors.getDescriptor().getEnumTypes().get(0);
+    }
+
+    private static final OperationType[] VALUES = values();
+
+    public static OperationType valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      if (desc.getIndex() == -1) {
+        return UNRECOGNIZED;
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int value;
+
+    private OperationType(int value) {
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:colors.OperationType)
+  }
+
   public interface RGBColorOrBuilder extends
       // @@protoc_insertion_point(interface_extends:colors.RGBColor)
       com.google.protobuf.MessageOrBuilder {
@@ -1280,6 +1388,908 @@ public final class Colors {
 
   }
 
+  public interface ColorsOperationArgumentOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:colors.ColorsOperationArgument)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>repeated .colors.HSVColor colors = 1;</code>
+     */
+    java.util.List<colors.Colors.HSVColor> 
+        getColorsList();
+    /**
+     * <code>repeated .colors.HSVColor colors = 1;</code>
+     */
+    colors.Colors.HSVColor getColors(int index);
+    /**
+     * <code>repeated .colors.HSVColor colors = 1;</code>
+     */
+    int getColorsCount();
+    /**
+     * <code>repeated .colors.HSVColor colors = 1;</code>
+     */
+    java.util.List<? extends colors.Colors.HSVColorOrBuilder> 
+        getColorsOrBuilderList();
+    /**
+     * <code>repeated .colors.HSVColor colors = 1;</code>
+     */
+    colors.Colors.HSVColorOrBuilder getColorsOrBuilder(
+        int index);
+
+    /**
+     * <code>.colors.OperationType operation = 2;</code>
+     * @return The enum numeric value on the wire for operation.
+     */
+    int getOperationValue();
+    /**
+     * <code>.colors.OperationType operation = 2;</code>
+     * @return The operation.
+     */
+    colors.Colors.OperationType getOperation();
+  }
+  /**
+   * Protobuf type {@code colors.ColorsOperationArgument}
+   */
+  public static final class ColorsOperationArgument extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:colors.ColorsOperationArgument)
+      ColorsOperationArgumentOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use ColorsOperationArgument.newBuilder() to construct.
+    private ColorsOperationArgument(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private ColorsOperationArgument() {
+      colors_ = java.util.Collections.emptyList();
+      operation_ = 0;
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new ColorsOperationArgument();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private ColorsOperationArgument(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                colors_ = new java.util.ArrayList<colors.Colors.HSVColor>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              colors_.add(
+                  input.readMessage(colors.Colors.HSVColor.parser(), extensionRegistry));
+              break;
+            }
+            case 16: {
+              int rawValue = input.readEnum();
+
+              operation_ = rawValue;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (com.google.protobuf.UninitializedMessageException e) {
+        throw e.asInvalidProtocolBufferException().setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) != 0)) {
+          colors_ = java.util.Collections.unmodifiableList(colors_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return colors.Colors.internal_static_colors_ColorsOperationArgument_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return colors.Colors.internal_static_colors_ColorsOperationArgument_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              colors.Colors.ColorsOperationArgument.class, colors.Colors.ColorsOperationArgument.Builder.class);
+    }
+
+    public static final int COLORS_FIELD_NUMBER = 1;
+    private java.util.List<colors.Colors.HSVColor> colors_;
+    /**
+     * <code>repeated .colors.HSVColor colors = 1;</code>
+     */
+    @java.lang.Override
+    public java.util.List<colors.Colors.HSVColor> getColorsList() {
+      return colors_;
+    }
+    /**
+     * <code>repeated .colors.HSVColor colors = 1;</code>
+     */
+    @java.lang.Override
+    public java.util.List<? extends colors.Colors.HSVColorOrBuilder> 
+        getColorsOrBuilderList() {
+      return colors_;
+    }
+    /**
+     * <code>repeated .colors.HSVColor colors = 1;</code>
+     */
+    @java.lang.Override
+    public int getColorsCount() {
+      return colors_.size();
+    }
+    /**
+     * <code>repeated .colors.HSVColor colors = 1;</code>
+     */
+    @java.lang.Override
+    public colors.Colors.HSVColor getColors(int index) {
+      return colors_.get(index);
+    }
+    /**
+     * <code>repeated .colors.HSVColor colors = 1;</code>
+     */
+    @java.lang.Override
+    public colors.Colors.HSVColorOrBuilder getColorsOrBuilder(
+        int index) {
+      return colors_.get(index);
+    }
+
+    public static final int OPERATION_FIELD_NUMBER = 2;
+    private int operation_;
+    /**
+     * <code>.colors.OperationType operation = 2;</code>
+     * @return The enum numeric value on the wire for operation.
+     */
+    @java.lang.Override public int getOperationValue() {
+      return operation_;
+    }
+    /**
+     * <code>.colors.OperationType operation = 2;</code>
+     * @return The operation.
+     */
+    @java.lang.Override public colors.Colors.OperationType getOperation() {
+      @SuppressWarnings("deprecation")
+      colors.Colors.OperationType result = colors.Colors.OperationType.valueOf(operation_);
+      return result == null ? colors.Colors.OperationType.UNRECOGNIZED : result;
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      for (int i = 0; i < colors_.size(); i++) {
+        output.writeMessage(1, colors_.get(i));
+      }
+      if (operation_ != colors.Colors.OperationType.AVERAGE.getNumber()) {
+        output.writeEnum(2, operation_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      for (int i = 0; i < colors_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, colors_.get(i));
+      }
+      if (operation_ != colors.Colors.OperationType.AVERAGE.getNumber()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(2, operation_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof colors.Colors.ColorsOperationArgument)) {
+        return super.equals(obj);
+      }
+      colors.Colors.ColorsOperationArgument other = (colors.Colors.ColorsOperationArgument) obj;
+
+      if (!getColorsList()
+          .equals(other.getColorsList())) return false;
+      if (operation_ != other.operation_) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      if (getColorsCount() > 0) {
+        hash = (37 * hash) + COLORS_FIELD_NUMBER;
+        hash = (53 * hash) + getColorsList().hashCode();
+      }
+      hash = (37 * hash) + OPERATION_FIELD_NUMBER;
+      hash = (53 * hash) + operation_;
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static colors.Colors.ColorsOperationArgument parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static colors.Colors.ColorsOperationArgument parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static colors.Colors.ColorsOperationArgument parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static colors.Colors.ColorsOperationArgument parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static colors.Colors.ColorsOperationArgument parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static colors.Colors.ColorsOperationArgument parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static colors.Colors.ColorsOperationArgument parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static colors.Colors.ColorsOperationArgument parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static colors.Colors.ColorsOperationArgument parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static colors.Colors.ColorsOperationArgument parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static colors.Colors.ColorsOperationArgument parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static colors.Colors.ColorsOperationArgument parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(colors.Colors.ColorsOperationArgument prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code colors.ColorsOperationArgument}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:colors.ColorsOperationArgument)
+        colors.Colors.ColorsOperationArgumentOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return colors.Colors.internal_static_colors_ColorsOperationArgument_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return colors.Colors.internal_static_colors_ColorsOperationArgument_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                colors.Colors.ColorsOperationArgument.class, colors.Colors.ColorsOperationArgument.Builder.class);
+      }
+
+      // Construct using colors.Colors.ColorsOperationArgument.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+          getColorsFieldBuilder();
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        if (colorsBuilder_ == null) {
+          colors_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          colorsBuilder_.clear();
+        }
+        operation_ = 0;
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return colors.Colors.internal_static_colors_ColorsOperationArgument_descriptor;
+      }
+
+      @java.lang.Override
+      public colors.Colors.ColorsOperationArgument getDefaultInstanceForType() {
+        return colors.Colors.ColorsOperationArgument.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public colors.Colors.ColorsOperationArgument build() {
+        colors.Colors.ColorsOperationArgument result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public colors.Colors.ColorsOperationArgument buildPartial() {
+        colors.Colors.ColorsOperationArgument result = new colors.Colors.ColorsOperationArgument(this);
+        int from_bitField0_ = bitField0_;
+        if (colorsBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) != 0)) {
+            colors_ = java.util.Collections.unmodifiableList(colors_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.colors_ = colors_;
+        } else {
+          result.colors_ = colorsBuilder_.build();
+        }
+        result.operation_ = operation_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof colors.Colors.ColorsOperationArgument) {
+          return mergeFrom((colors.Colors.ColorsOperationArgument)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(colors.Colors.ColorsOperationArgument other) {
+        if (other == colors.Colors.ColorsOperationArgument.getDefaultInstance()) return this;
+        if (colorsBuilder_ == null) {
+          if (!other.colors_.isEmpty()) {
+            if (colors_.isEmpty()) {
+              colors_ = other.colors_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureColorsIsMutable();
+              colors_.addAll(other.colors_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.colors_.isEmpty()) {
+            if (colorsBuilder_.isEmpty()) {
+              colorsBuilder_.dispose();
+              colorsBuilder_ = null;
+              colors_ = other.colors_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              colorsBuilder_ = 
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                   getColorsFieldBuilder() : null;
+            } else {
+              colorsBuilder_.addAllMessages(other.colors_);
+            }
+          }
+        }
+        if (other.operation_ != 0) {
+          setOperationValue(other.getOperationValue());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        colors.Colors.ColorsOperationArgument parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (colors.Colors.ColorsOperationArgument) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private java.util.List<colors.Colors.HSVColor> colors_ =
+        java.util.Collections.emptyList();
+      private void ensureColorsIsMutable() {
+        if (!((bitField0_ & 0x00000001) != 0)) {
+          colors_ = new java.util.ArrayList<colors.Colors.HSVColor>(colors_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          colors.Colors.HSVColor, colors.Colors.HSVColor.Builder, colors.Colors.HSVColorOrBuilder> colorsBuilder_;
+
+      /**
+       * <code>repeated .colors.HSVColor colors = 1;</code>
+       */
+      public java.util.List<colors.Colors.HSVColor> getColorsList() {
+        if (colorsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(colors_);
+        } else {
+          return colorsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .colors.HSVColor colors = 1;</code>
+       */
+      public int getColorsCount() {
+        if (colorsBuilder_ == null) {
+          return colors_.size();
+        } else {
+          return colorsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .colors.HSVColor colors = 1;</code>
+       */
+      public colors.Colors.HSVColor getColors(int index) {
+        if (colorsBuilder_ == null) {
+          return colors_.get(index);
+        } else {
+          return colorsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .colors.HSVColor colors = 1;</code>
+       */
+      public Builder setColors(
+          int index, colors.Colors.HSVColor value) {
+        if (colorsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureColorsIsMutable();
+          colors_.set(index, value);
+          onChanged();
+        } else {
+          colorsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .colors.HSVColor colors = 1;</code>
+       */
+      public Builder setColors(
+          int index, colors.Colors.HSVColor.Builder builderForValue) {
+        if (colorsBuilder_ == null) {
+          ensureColorsIsMutable();
+          colors_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          colorsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .colors.HSVColor colors = 1;</code>
+       */
+      public Builder addColors(colors.Colors.HSVColor value) {
+        if (colorsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureColorsIsMutable();
+          colors_.add(value);
+          onChanged();
+        } else {
+          colorsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .colors.HSVColor colors = 1;</code>
+       */
+      public Builder addColors(
+          int index, colors.Colors.HSVColor value) {
+        if (colorsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureColorsIsMutable();
+          colors_.add(index, value);
+          onChanged();
+        } else {
+          colorsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .colors.HSVColor colors = 1;</code>
+       */
+      public Builder addColors(
+          colors.Colors.HSVColor.Builder builderForValue) {
+        if (colorsBuilder_ == null) {
+          ensureColorsIsMutable();
+          colors_.add(builderForValue.build());
+          onChanged();
+        } else {
+          colorsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .colors.HSVColor colors = 1;</code>
+       */
+      public Builder addColors(
+          int index, colors.Colors.HSVColor.Builder builderForValue) {
+        if (colorsBuilder_ == null) {
+          ensureColorsIsMutable();
+          colors_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          colorsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .colors.HSVColor colors = 1;</code>
+       */
+      public Builder addAllColors(
+          java.lang.Iterable<? extends colors.Colors.HSVColor> values) {
+        if (colorsBuilder_ == null) {
+          ensureColorsIsMutable();
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
+              values, colors_);
+          onChanged();
+        } else {
+          colorsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .colors.HSVColor colors = 1;</code>
+       */
+      public Builder clearColors() {
+        if (colorsBuilder_ == null) {
+          colors_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          colorsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .colors.HSVColor colors = 1;</code>
+       */
+      public Builder removeColors(int index) {
+        if (colorsBuilder_ == null) {
+          ensureColorsIsMutable();
+          colors_.remove(index);
+          onChanged();
+        } else {
+          colorsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .colors.HSVColor colors = 1;</code>
+       */
+      public colors.Colors.HSVColor.Builder getColorsBuilder(
+          int index) {
+        return getColorsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .colors.HSVColor colors = 1;</code>
+       */
+      public colors.Colors.HSVColorOrBuilder getColorsOrBuilder(
+          int index) {
+        if (colorsBuilder_ == null) {
+          return colors_.get(index);  } else {
+          return colorsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .colors.HSVColor colors = 1;</code>
+       */
+      public java.util.List<? extends colors.Colors.HSVColorOrBuilder> 
+           getColorsOrBuilderList() {
+        if (colorsBuilder_ != null) {
+          return colorsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(colors_);
+        }
+      }
+      /**
+       * <code>repeated .colors.HSVColor colors = 1;</code>
+       */
+      public colors.Colors.HSVColor.Builder addColorsBuilder() {
+        return getColorsFieldBuilder().addBuilder(
+            colors.Colors.HSVColor.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .colors.HSVColor colors = 1;</code>
+       */
+      public colors.Colors.HSVColor.Builder addColorsBuilder(
+          int index) {
+        return getColorsFieldBuilder().addBuilder(
+            index, colors.Colors.HSVColor.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .colors.HSVColor colors = 1;</code>
+       */
+      public java.util.List<colors.Colors.HSVColor.Builder> 
+           getColorsBuilderList() {
+        return getColorsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          colors.Colors.HSVColor, colors.Colors.HSVColor.Builder, colors.Colors.HSVColorOrBuilder> 
+          getColorsFieldBuilder() {
+        if (colorsBuilder_ == null) {
+          colorsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              colors.Colors.HSVColor, colors.Colors.HSVColor.Builder, colors.Colors.HSVColorOrBuilder>(
+                  colors_,
+                  ((bitField0_ & 0x00000001) != 0),
+                  getParentForChildren(),
+                  isClean());
+          colors_ = null;
+        }
+        return colorsBuilder_;
+      }
+
+      private int operation_ = 0;
+      /**
+       * <code>.colors.OperationType operation = 2;</code>
+       * @return The enum numeric value on the wire for operation.
+       */
+      @java.lang.Override public int getOperationValue() {
+        return operation_;
+      }
+      /**
+       * <code>.colors.OperationType operation = 2;</code>
+       * @param value The enum numeric value on the wire for operation to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOperationValue(int value) {
+        
+        operation_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.colors.OperationType operation = 2;</code>
+       * @return The operation.
+       */
+      @java.lang.Override
+      public colors.Colors.OperationType getOperation() {
+        @SuppressWarnings("deprecation")
+        colors.Colors.OperationType result = colors.Colors.OperationType.valueOf(operation_);
+        return result == null ? colors.Colors.OperationType.UNRECOGNIZED : result;
+      }
+      /**
+       * <code>.colors.OperationType operation = 2;</code>
+       * @param value The operation to set.
+       * @return This builder for chaining.
+       */
+      public Builder setOperation(colors.Colors.OperationType value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        
+        operation_ = value.getNumber();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>.colors.OperationType operation = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearOperation() {
+        
+        operation_ = 0;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:colors.ColorsOperationArgument)
+    }
+
+    // @@protoc_insertion_point(class_scope:colors.ColorsOperationArgument)
+    private static final colors.Colors.ColorsOperationArgument DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new colors.Colors.ColorsOperationArgument();
+    }
+
+    public static colors.Colors.ColorsOperationArgument getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<ColorsOperationArgument>
+        PARSER = new com.google.protobuf.AbstractParser<ColorsOperationArgument>() {
+      @java.lang.Override
+      public ColorsOperationArgument parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new ColorsOperationArgument(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<ColorsOperationArgument> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ColorsOperationArgument> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public colors.Colors.ColorsOperationArgument getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_colors_RGBColor_descriptor;
   private static final 
@@ -1290,6 +2300,11 @@ public final class Colors {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_colors_HSVColor_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_colors_ColorsOperationArgument_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_colors_ColorsOperationArgument_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -1301,10 +2316,16 @@ public final class Colors {
     java.lang.String[] descriptorData = {
       "\n\014colors.proto\022\006colors\"+\n\010RGBColor\022\t\n\001r\030" +
       "\001 \001(\005\022\t\n\001g\030\002 \001(\005\022\t\n\001b\030\003 \001(\005\"+\n\010HSVColor\022" +
-      "\t\n\001h\030\001 \001(\002\022\t\n\001s\030\002 \001(\002\022\t\n\001v\030\003 \001(\0022p\n\nChan" +
-      "geMode\0220\n\010RGBToHSV\022\020.colors.RGBColor\032\020.c" +
-      "olors.HSVColor\"\000\0220\n\010HSVToRGB\022\020.colors.HS" +
-      "VColor\032\020.colors.RGBColor\"\000b\006proto3"
+      "\t\n\001h\030\001 \001(\002\022\t\n\001s\030\002 \001(\002\022\t\n\001v\030\003 \001(\002\"e\n\027Colo" +
+      "rsOperationArgument\022 \n\006colors\030\001 \003(\0132\020.co" +
+      "lors.HSVColor\022(\n\toperation\030\002 \001(\0162\025.color" +
+      "s.OperationType*%\n\rOperationType\022\013\n\007AVER" +
+      "AGE\020\000\022\007\n\003MAX\020\0012\277\001\n\016ColorTransform\0220\n\010RGB" +
+      "ToHSV\022\020.colors.RGBColor\032\020.colors.HSVColo" +
+      "r\"\000\0220\n\010HSVToRGB\022\020.colors.HSVColor\032\020.colo" +
+      "rs.RGBColor\"\000\022I\n\022HSVColorsAggregate\022\037.co" +
+      "lors.ColorsOperationArgument\032\020.colors.HS" +
+      "VColor\"\000b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -1322,6 +2343,12 @@ public final class Colors {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_colors_HSVColor_descriptor,
         new java.lang.String[] { "H", "S", "V", });
+    internal_static_colors_ColorsOperationArgument_descriptor =
+      getDescriptor().getMessageTypes().get(2);
+    internal_static_colors_ColorsOperationArgument_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_colors_ColorsOperationArgument_descriptor,
+        new java.lang.String[] { "Colors", "Operation", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

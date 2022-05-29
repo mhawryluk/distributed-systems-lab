@@ -14,7 +14,18 @@ message HSVColor {
   float v = 3;
 }
 
-service ChangeMode {
+enum OperationType {
+  AVERAGE = 0;
+  MAX = 1;
+}
+
+message ColorsOperationArgument {
+  repeated HSVColor colors = 1;
+  OperationType operation = 2;
+}
+
+service ColorTransform {
   rpc RGBToHSV (RGBColor) returns (HSVColor) {}
   rpc HSVToRGB (HSVColor) returns (RGBColor) {}
+  rpc HSVColorsAggregate(ColorsOperationArgument) returns (HSVColor) {}
 }

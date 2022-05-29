@@ -17,10 +17,8 @@ public class Server {
 	private void start() throws IOException {
 
 		server = NettyServerBuilder.forPort(port).executor(Executors.newFixedThreadPool(16))
-				.addService(new ChangeModeImpl())
+				.addService(new ColorTransform())
 				.addService(ProtoReflectionService.newInstance())
-				//.keepAliveTime(12, TimeUnit.SECONDS)
-				//.keepAliveTimeout(6, TimeUnit.SECONDS)
 				.build()
 				.start();
 

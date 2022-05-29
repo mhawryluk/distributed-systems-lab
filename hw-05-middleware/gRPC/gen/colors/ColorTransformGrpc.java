@@ -8,11 +8,11 @@ import static io.grpc.MethodDescriptor.generateFullMethodName;
     value = "by gRPC proto compiler (version 1.45.1)",
     comments = "Source: colors.proto")
 @io.grpc.stub.annotations.GrpcGenerated
-public final class ChangeModeGrpc {
+public final class ColorTransformGrpc {
 
-  private ChangeModeGrpc() {}
+  private ColorTransformGrpc() {}
 
-  public static final String SERVICE_NAME = "colors.ChangeMode";
+  public static final String SERVICE_NAME = "colors.ColorTransform";
 
   // Static method descriptors that strictly reflect the proto.
   private static volatile io.grpc.MethodDescriptor<colors.Colors.RGBColor,
@@ -26,10 +26,10 @@ public final class ChangeModeGrpc {
   public static io.grpc.MethodDescriptor<colors.Colors.RGBColor,
       colors.Colors.HSVColor> getRGBToHSVMethod() {
     io.grpc.MethodDescriptor<colors.Colors.RGBColor, colors.Colors.HSVColor> getRGBToHSVMethod;
-    if ((getRGBToHSVMethod = ChangeModeGrpc.getRGBToHSVMethod) == null) {
-      synchronized (ChangeModeGrpc.class) {
-        if ((getRGBToHSVMethod = ChangeModeGrpc.getRGBToHSVMethod) == null) {
-          ChangeModeGrpc.getRGBToHSVMethod = getRGBToHSVMethod =
+    if ((getRGBToHSVMethod = ColorTransformGrpc.getRGBToHSVMethod) == null) {
+      synchronized (ColorTransformGrpc.class) {
+        if ((getRGBToHSVMethod = ColorTransformGrpc.getRGBToHSVMethod) == null) {
+          ColorTransformGrpc.getRGBToHSVMethod = getRGBToHSVMethod =
               io.grpc.MethodDescriptor.<colors.Colors.RGBColor, colors.Colors.HSVColor>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "RGBToHSV"))
@@ -38,7 +38,7 @@ public final class ChangeModeGrpc {
                   colors.Colors.RGBColor.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   colors.Colors.HSVColor.getDefaultInstance()))
-              .setSchemaDescriptor(new ChangeModeMethodDescriptorSupplier("RGBToHSV"))
+              .setSchemaDescriptor(new ColorTransformMethodDescriptorSupplier("RGBToHSV"))
               .build();
         }
       }
@@ -57,10 +57,10 @@ public final class ChangeModeGrpc {
   public static io.grpc.MethodDescriptor<colors.Colors.HSVColor,
       colors.Colors.RGBColor> getHSVToRGBMethod() {
     io.grpc.MethodDescriptor<colors.Colors.HSVColor, colors.Colors.RGBColor> getHSVToRGBMethod;
-    if ((getHSVToRGBMethod = ChangeModeGrpc.getHSVToRGBMethod) == null) {
-      synchronized (ChangeModeGrpc.class) {
-        if ((getHSVToRGBMethod = ChangeModeGrpc.getHSVToRGBMethod) == null) {
-          ChangeModeGrpc.getHSVToRGBMethod = getHSVToRGBMethod =
+    if ((getHSVToRGBMethod = ColorTransformGrpc.getHSVToRGBMethod) == null) {
+      synchronized (ColorTransformGrpc.class) {
+        if ((getHSVToRGBMethod = ColorTransformGrpc.getHSVToRGBMethod) == null) {
+          ColorTransformGrpc.getHSVToRGBMethod = getHSVToRGBMethod =
               io.grpc.MethodDescriptor.<colors.Colors.HSVColor, colors.Colors.RGBColor>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
               .setFullMethodName(generateFullMethodName(SERVICE_NAME, "HSVToRGB"))
@@ -69,7 +69,7 @@ public final class ChangeModeGrpc {
                   colors.Colors.HSVColor.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   colors.Colors.RGBColor.getDefaultInstance()))
-              .setSchemaDescriptor(new ChangeModeMethodDescriptorSupplier("HSVToRGB"))
+              .setSchemaDescriptor(new ColorTransformMethodDescriptorSupplier("HSVToRGB"))
               .build();
         }
       }
@@ -77,53 +77,84 @@ public final class ChangeModeGrpc {
     return getHSVToRGBMethod;
   }
 
+  private static volatile io.grpc.MethodDescriptor<colors.Colors.ColorsOperationArgument,
+      colors.Colors.HSVColor> getHSVColorsAggregateMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "HSVColorsAggregate",
+      requestType = colors.Colors.ColorsOperationArgument.class,
+      responseType = colors.Colors.HSVColor.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
+  public static io.grpc.MethodDescriptor<colors.Colors.ColorsOperationArgument,
+      colors.Colors.HSVColor> getHSVColorsAggregateMethod() {
+    io.grpc.MethodDescriptor<colors.Colors.ColorsOperationArgument, colors.Colors.HSVColor> getHSVColorsAggregateMethod;
+    if ((getHSVColorsAggregateMethod = ColorTransformGrpc.getHSVColorsAggregateMethod) == null) {
+      synchronized (ColorTransformGrpc.class) {
+        if ((getHSVColorsAggregateMethod = ColorTransformGrpc.getHSVColorsAggregateMethod) == null) {
+          ColorTransformGrpc.getHSVColorsAggregateMethod = getHSVColorsAggregateMethod =
+              io.grpc.MethodDescriptor.<colors.Colors.ColorsOperationArgument, colors.Colors.HSVColor>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "HSVColorsAggregate"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  colors.Colors.ColorsOperationArgument.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  colors.Colors.HSVColor.getDefaultInstance()))
+              .setSchemaDescriptor(new ColorTransformMethodDescriptorSupplier("HSVColorsAggregate"))
+              .build();
+        }
+      }
+    }
+    return getHSVColorsAggregateMethod;
+  }
+
   /**
    * Creates a new async stub that supports all call types for the service
    */
-  public static ChangeModeStub newStub(io.grpc.Channel channel) {
-    io.grpc.stub.AbstractStub.StubFactory<ChangeModeStub> factory =
-      new io.grpc.stub.AbstractStub.StubFactory<ChangeModeStub>() {
+  public static ColorTransformStub newStub(io.grpc.Channel channel) {
+    io.grpc.stub.AbstractStub.StubFactory<ColorTransformStub> factory =
+      new io.grpc.stub.AbstractStub.StubFactory<ColorTransformStub>() {
         @java.lang.Override
-        public ChangeModeStub newStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
-          return new ChangeModeStub(channel, callOptions);
+        public ColorTransformStub newStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
+          return new ColorTransformStub(channel, callOptions);
         }
       };
-    return ChangeModeStub.newStub(factory, channel);
+    return ColorTransformStub.newStub(factory, channel);
   }
 
   /**
    * Creates a new blocking-style stub that supports unary and streaming output calls on the service
    */
-  public static ChangeModeBlockingStub newBlockingStub(
+  public static ColorTransformBlockingStub newBlockingStub(
       io.grpc.Channel channel) {
-    io.grpc.stub.AbstractStub.StubFactory<ChangeModeBlockingStub> factory =
-      new io.grpc.stub.AbstractStub.StubFactory<ChangeModeBlockingStub>() {
+    io.grpc.stub.AbstractStub.StubFactory<ColorTransformBlockingStub> factory =
+      new io.grpc.stub.AbstractStub.StubFactory<ColorTransformBlockingStub>() {
         @java.lang.Override
-        public ChangeModeBlockingStub newStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
-          return new ChangeModeBlockingStub(channel, callOptions);
+        public ColorTransformBlockingStub newStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
+          return new ColorTransformBlockingStub(channel, callOptions);
         }
       };
-    return ChangeModeBlockingStub.newStub(factory, channel);
+    return ColorTransformBlockingStub.newStub(factory, channel);
   }
 
   /**
    * Creates a new ListenableFuture-style stub that supports unary calls on the service
    */
-  public static ChangeModeFutureStub newFutureStub(
+  public static ColorTransformFutureStub newFutureStub(
       io.grpc.Channel channel) {
-    io.grpc.stub.AbstractStub.StubFactory<ChangeModeFutureStub> factory =
-      new io.grpc.stub.AbstractStub.StubFactory<ChangeModeFutureStub>() {
+    io.grpc.stub.AbstractStub.StubFactory<ColorTransformFutureStub> factory =
+      new io.grpc.stub.AbstractStub.StubFactory<ColorTransformFutureStub>() {
         @java.lang.Override
-        public ChangeModeFutureStub newStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
-          return new ChangeModeFutureStub(channel, callOptions);
+        public ColorTransformFutureStub newStub(io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
+          return new ColorTransformFutureStub(channel, callOptions);
         }
       };
-    return ChangeModeFutureStub.newStub(factory, channel);
+    return ColorTransformFutureStub.newStub(factory, channel);
   }
 
   /**
    */
-  public static abstract class ChangeModeImplBase implements io.grpc.BindableService {
+  public static abstract class ColorTransformImplBase implements io.grpc.BindableService {
 
     /**
      */
@@ -137,6 +168,13 @@ public final class ChangeModeGrpc {
     public void hSVToRGB(colors.Colors.HSVColor request,
         io.grpc.stub.StreamObserver<colors.Colors.RGBColor> responseObserver) {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getHSVToRGBMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void hSVColorsAggregate(colors.Colors.ColorsOperationArgument request,
+        io.grpc.stub.StreamObserver<colors.Colors.HSVColor> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getHSVColorsAggregateMethod(), responseObserver);
     }
 
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
@@ -155,22 +193,29 @@ public final class ChangeModeGrpc {
                 colors.Colors.HSVColor,
                 colors.Colors.RGBColor>(
                   this, METHODID_HSVTO_RGB)))
+          .addMethod(
+            getHSVColorsAggregateMethod(),
+            io.grpc.stub.ServerCalls.asyncUnaryCall(
+              new MethodHandlers<
+                colors.Colors.ColorsOperationArgument,
+                colors.Colors.HSVColor>(
+                  this, METHODID_HSVCOLORS_AGGREGATE)))
           .build();
     }
   }
 
   /**
    */
-  public static final class ChangeModeStub extends io.grpc.stub.AbstractAsyncStub<ChangeModeStub> {
-    private ChangeModeStub(
+  public static final class ColorTransformStub extends io.grpc.stub.AbstractAsyncStub<ColorTransformStub> {
+    private ColorTransformStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
     }
 
     @java.lang.Override
-    protected ChangeModeStub build(
+    protected ColorTransformStub build(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
-      return new ChangeModeStub(channel, callOptions);
+      return new ColorTransformStub(channel, callOptions);
     }
 
     /**
@@ -188,20 +233,28 @@ public final class ChangeModeGrpc {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
           getChannel().newCall(getHSVToRGBMethod(), getCallOptions()), request, responseObserver);
     }
+
+    /**
+     */
+    public void hSVColorsAggregate(colors.Colors.ColorsOperationArgument request,
+        io.grpc.stub.StreamObserver<colors.Colors.HSVColor> responseObserver) {
+      io.grpc.stub.ClientCalls.asyncUnaryCall(
+          getChannel().newCall(getHSVColorsAggregateMethod(), getCallOptions()), request, responseObserver);
+    }
   }
 
   /**
    */
-  public static final class ChangeModeBlockingStub extends io.grpc.stub.AbstractBlockingStub<ChangeModeBlockingStub> {
-    private ChangeModeBlockingStub(
+  public static final class ColorTransformBlockingStub extends io.grpc.stub.AbstractBlockingStub<ColorTransformBlockingStub> {
+    private ColorTransformBlockingStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
     }
 
     @java.lang.Override
-    protected ChangeModeBlockingStub build(
+    protected ColorTransformBlockingStub build(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
-      return new ChangeModeBlockingStub(channel, callOptions);
+      return new ColorTransformBlockingStub(channel, callOptions);
     }
 
     /**
@@ -217,20 +270,27 @@ public final class ChangeModeGrpc {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
           getChannel(), getHSVToRGBMethod(), getCallOptions(), request);
     }
+
+    /**
+     */
+    public colors.Colors.HSVColor hSVColorsAggregate(colors.Colors.ColorsOperationArgument request) {
+      return io.grpc.stub.ClientCalls.blockingUnaryCall(
+          getChannel(), getHSVColorsAggregateMethod(), getCallOptions(), request);
+    }
   }
 
   /**
    */
-  public static final class ChangeModeFutureStub extends io.grpc.stub.AbstractFutureStub<ChangeModeFutureStub> {
-    private ChangeModeFutureStub(
+  public static final class ColorTransformFutureStub extends io.grpc.stub.AbstractFutureStub<ColorTransformFutureStub> {
+    private ColorTransformFutureStub(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
       super(channel, callOptions);
     }
 
     @java.lang.Override
-    protected ChangeModeFutureStub build(
+    protected ColorTransformFutureStub build(
         io.grpc.Channel channel, io.grpc.CallOptions callOptions) {
-      return new ChangeModeFutureStub(channel, callOptions);
+      return new ColorTransformFutureStub(channel, callOptions);
     }
 
     /**
@@ -248,20 +308,29 @@ public final class ChangeModeGrpc {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
           getChannel().newCall(getHSVToRGBMethod(), getCallOptions()), request);
     }
+
+    /**
+     */
+    public com.google.common.util.concurrent.ListenableFuture<colors.Colors.HSVColor> hSVColorsAggregate(
+        colors.Colors.ColorsOperationArgument request) {
+      return io.grpc.stub.ClientCalls.futureUnaryCall(
+          getChannel().newCall(getHSVColorsAggregateMethod(), getCallOptions()), request);
+    }
   }
 
   private static final int METHODID_RGBTO_HSV = 0;
   private static final int METHODID_HSVTO_RGB = 1;
+  private static final int METHODID_HSVCOLORS_AGGREGATE = 2;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.ServerStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.ClientStreamingMethod<Req, Resp>,
       io.grpc.stub.ServerCalls.BidiStreamingMethod<Req, Resp> {
-    private final ChangeModeImplBase serviceImpl;
+    private final ColorTransformImplBase serviceImpl;
     private final int methodId;
 
-    MethodHandlers(ChangeModeImplBase serviceImpl, int methodId) {
+    MethodHandlers(ColorTransformImplBase serviceImpl, int methodId) {
       this.serviceImpl = serviceImpl;
       this.methodId = methodId;
     }
@@ -277,6 +346,10 @@ public final class ChangeModeGrpc {
         case METHODID_HSVTO_RGB:
           serviceImpl.hSVToRGB((colors.Colors.HSVColor) request,
               (io.grpc.stub.StreamObserver<colors.Colors.RGBColor>) responseObserver);
+          break;
+        case METHODID_HSVCOLORS_AGGREGATE:
+          serviceImpl.hSVColorsAggregate((colors.Colors.ColorsOperationArgument) request,
+              (io.grpc.stub.StreamObserver<colors.Colors.HSVColor>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -294,9 +367,9 @@ public final class ChangeModeGrpc {
     }
   }
 
-  private static abstract class ChangeModeBaseDescriptorSupplier
+  private static abstract class ColorTransformBaseDescriptorSupplier
       implements io.grpc.protobuf.ProtoFileDescriptorSupplier, io.grpc.protobuf.ProtoServiceDescriptorSupplier {
-    ChangeModeBaseDescriptorSupplier() {}
+    ColorTransformBaseDescriptorSupplier() {}
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.FileDescriptor getFileDescriptor() {
@@ -305,21 +378,21 @@ public final class ChangeModeGrpc {
 
     @java.lang.Override
     public com.google.protobuf.Descriptors.ServiceDescriptor getServiceDescriptor() {
-      return getFileDescriptor().findServiceByName("ChangeMode");
+      return getFileDescriptor().findServiceByName("ColorTransform");
     }
   }
 
-  private static final class ChangeModeFileDescriptorSupplier
-      extends ChangeModeBaseDescriptorSupplier {
-    ChangeModeFileDescriptorSupplier() {}
+  private static final class ColorTransformFileDescriptorSupplier
+      extends ColorTransformBaseDescriptorSupplier {
+    ColorTransformFileDescriptorSupplier() {}
   }
 
-  private static final class ChangeModeMethodDescriptorSupplier
-      extends ChangeModeBaseDescriptorSupplier
+  private static final class ColorTransformMethodDescriptorSupplier
+      extends ColorTransformBaseDescriptorSupplier
       implements io.grpc.protobuf.ProtoMethodDescriptorSupplier {
     private final String methodName;
 
-    ChangeModeMethodDescriptorSupplier(String methodName) {
+    ColorTransformMethodDescriptorSupplier(String methodName) {
       this.methodName = methodName;
     }
 
@@ -334,13 +407,14 @@ public final class ChangeModeGrpc {
   public static io.grpc.ServiceDescriptor getServiceDescriptor() {
     io.grpc.ServiceDescriptor result = serviceDescriptor;
     if (result == null) {
-      synchronized (ChangeModeGrpc.class) {
+      synchronized (ColorTransformGrpc.class) {
         result = serviceDescriptor;
         if (result == null) {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
-              .setSchemaDescriptor(new ChangeModeFileDescriptorSupplier())
+              .setSchemaDescriptor(new ColorTransformFileDescriptorSupplier())
               .addMethod(getRGBToHSVMethod())
               .addMethod(getHSVToRGBMethod())
+              .addMethod(getHSVColorsAggregateMethod())
               .build();
         }
       }
