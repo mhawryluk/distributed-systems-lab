@@ -3,6 +3,7 @@ package agh.distributed
 import org.apache.zookeeper.{AddWatchMode, WatchedEvent, Watcher, ZooKeeper}
 import org.apache.zookeeper.Watcher.Event
 
+import scala.annotation.tailrec
 import scala.sys.process.Process
 import scala.io.StdIn.readLine
 
@@ -17,7 +18,9 @@ class NodeWatcher(val program: String, val node: String) extends Watcher {
   def printTree(): Unit = {
     lazy val printTreeForNode: String => Unit = (node: String) => {
       println(node)
-      client.getChildren(node, false).forEach(child => {printTreeForNode(s"$node/$child")})
+      client.getChildren(node, false).forEach(child => {
+        printTreeForNode(s"$node/$child")
+      })
     }
 
     println("\n------")
@@ -57,10 +60,18 @@ object NodeWatcher {
     val nodeWatcher = new NodeWatcher(program, "/z")
 
     new Thread(() => {
-      while (true) {
-        readLine()
-        nodeWatcher.printTree()
+
+      @tailrec
+      def commandReader(): Unit = {
+        readLine() match {
+          case "exit" =>
+          case _ =>
+            nodeWatcher.printTree()
+            commandReader()
+        }
       }
+
+      commandReader()
     }).start()
   }
 }
