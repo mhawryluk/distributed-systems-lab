@@ -12,8 +12,8 @@ class NodeWatcher(val program: String, val node: String) extends Watcher {
   private val client = new ZooKeeper("localhost:2184", 2000, this)
   client.addWatch(node, this, AddWatchMode.PERSISTENT_RECURSIVE)
 
-  private val pb = Process(program)
-  var p: Option[Process] = None
+  private val processBuilder = Process(program)
+  var process: Option[Process] = None
 
   def printTree(): Unit = {
     lazy val printTreeForNode: String => Unit = (node: String) => {
@@ -23,9 +23,11 @@ class NodeWatcher(val program: String, val node: String) extends Watcher {
       })
     }
 
-    println("\n------")
-    printTreeForNode(node)
-    println("------\n")
+    if (client.exists(node, false) != null) {
+      println("\n------")
+      printTreeForNode(node)
+      println("------\n")
+    }
   }
 
   override def process(watchedEvent: WatchedEvent): Unit = {
@@ -33,7 +35,7 @@ class NodeWatcher(val program: String, val node: String) extends Watcher {
       case Event.EventType.NodeCreated =>
         println(s"node ${watchedEvent.getPath} created")
         watchedEvent.getPath match {
-          case `node` => p = Option(pb.run())
+          case `node` => process = Option(processBuilder.run())
           case path if path startsWith node =>
             println(s"All children count: ${client getAllChildrenNumber node}")
           case other => println(s"unrecognized node: $other")
@@ -42,7 +44,7 @@ class NodeWatcher(val program: String, val node: String) extends Watcher {
       case Event.EventType.NodeDeleted =>
         if (watchedEvent.getPath == node) {
           println(s"node $node removed")
-          p.foreach(_.destroy)
+          process.foreach(_.destroy)
         }
 
       case Event.EventType.None =>
@@ -64,7 +66,7 @@ object NodeWatcher {
       @tailrec
       def commandReader(): Unit = {
         readLine() match {
-          case "exit" =>
+          case "exit" => println("exit...")
           case _ =>
             nodeWatcher.printTree()
             commandReader()
