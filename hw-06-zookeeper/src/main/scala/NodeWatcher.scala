@@ -14,6 +14,17 @@ class NodeWatcher(val program: String, val node: String) extends Watcher {
   private val pb = Process(program)
   var p: Option[Process] = None
 
+  def printTree(): Unit = {
+    lazy val printTreeForNode: String => Unit = (node: String) => {
+      println(node)
+      client.getChildren(node, false).forEach(child => {printTreeForNode(s"$node/$child")})
+    }
+
+    println("\n------")
+    printTreeForNode(node)
+    println("------\n")
+  }
+
   override def process(watchedEvent: WatchedEvent): Unit = {
     watchedEvent.getType match {
       case Event.EventType.NodeCreated =>
@@ -43,12 +54,12 @@ object NodeWatcher {
   def main(args: Array[String]): Unit = {
 
     val program = args(0)
-    new NodeWatcher(program, "/z")
+    val nodeWatcher = new NodeWatcher(program, "/z")
 
     new Thread(() => {
       while (true) {
         readLine()
-        println("hi")
+        nodeWatcher.printTree()
       }
     }).start()
   }
