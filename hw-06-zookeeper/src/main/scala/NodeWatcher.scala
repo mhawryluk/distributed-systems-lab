@@ -23,14 +23,19 @@ class NodeWatcher(val program: String, val node: String) extends Watcher {
       })
     }
 
+    println("\n------")
     if (client.exists(node, false) != null) {
-      println("\n------")
       printTreeForNode(node)
-      println("------\n")
     }
+    println("------\n")
   }
 
   override def process(watchedEvent: WatchedEvent): Unit = {
+    if (watchedEvent.getState eq Event.KeeperState.Disconnected) {
+      println("server disconnected")
+      System.exit(1)
+    }
+
     watchedEvent.getType match {
       case Event.EventType.NodeCreated =>
         println(s"node ${watchedEvent.getPath} created")
@@ -48,9 +53,7 @@ class NodeWatcher(val program: String, val node: String) extends Watcher {
         }
 
       case Event.EventType.None =>
-
-      case other =>
-        println(other)
+      case other => println(other)
     }
   }
 }
